@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Peralta&display=swap');
+
+:root {
+	--main-bg-color: #8accd5;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -5,5 +11,28 @@
 }
 
 body {
-	background-color: #8accd5;
+	background-color: var(--main-bg-color);
+}
+
+/* Utility classes */
+.hidden {
+	display: none;
+}
+
+#game-frame {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	min-width: 100vw;
+	min-height: 60vh;
+}
+
+#main-menu {
+	text-align: center;
+}
+
+#game-title {
+	font-family: 'Peralta', serif;
+	font-size: 4rem;
 }

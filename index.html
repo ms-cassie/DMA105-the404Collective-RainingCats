@@ -13,12 +13,29 @@
 </head>
 <body>
 
-	<div class="main-menu">
-		<small>~ The 404 Collective ~</small>
-		<h1>Raining Cats</h1>
-		<button id="start-button">Play</button>
-		<button id="how-to-play">How to Play</button>
+	<div id="game-frame">
+
+		<div id="main-menu">
+			<small>~ The 404 Collective ~</small>
+			<h1 id="game-title">Raining Cats</h1>
+			<button id="btn-play-game">Play</button>
+			<button id="btn-how-to-play">How to Play</button>
+		</div>
+
+		<div id="player-select" class="hidden">
+			<h2>Player Select</h2>
+		</div>
+
+		<div id="game" class="hidden">
+			<h2>Game</h2>
+		</div>
+
+		<div id="game-over" class="hidden">
+			<h2>Game Over</h2>
+		</div>
+
 	</div>
+
 
 	<script src="script.js"></script>
 </body>
