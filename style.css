@@ -39,7 +39,7 @@ body {
 	justify-content: center;
 
 	min-width: 100vw;
-	min-height: 60vh;
+	min-height: 75vh;
 }
 
 
@@ -54,6 +54,7 @@ body {
 	border: 5px dashed whitesmoke;
 	padding: 3rem;
 	border-radius: 1rem;
+	box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
 }
 
 #game-title {
@@ -68,4 +69,22 @@ body {
 	gap: 1.5rem;
 	width: 200px;
 	margin: 0 auto;
+}
+
+#menu-buttons button {
+	padding: 1rem;
+	font-size: 1.2rem;
+	border-bottom: 5px solid #550a23;
+	border-radius: 0.5rem;
+	background-color: #801531;
+	color: white;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	transition: transform 0.2s;
+	box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+#menu-buttons button:hover {
+	background-color: #cf285a;
+	transform: scale(1.05);
 }
