@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Peralta&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Knewave&family=Peralta&display=swap');
 
 :root {
 	--main-bg-color: #8accd5;
@@ -12,12 +12,70 @@
 
 body {
 	background-color: var(--main-bg-color);
+	font-family: 'Comic Sans MS';
 	overflow: hidden;
 }
 
 /* Utility classes */
 .hidden {
 	display: none;
+}
+
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+}
+
+.modal-content {
+	background-color: white;
+	padding: 2rem;
+	border-radius: 0.5rem;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	position: relative;
+
+	max-width: 50%;
+}
+
+.modal-content h2 {
+	margin-bottom: 1rem;
+}
+
+.modal-content .close-button {
+	cursor: pointer;
+	text-align: center;
+	background-color: #801531;
+	border-radius: 50%;
+	color: white;
+	padding: 0.2rem 0.6rem;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 1.2rem;
+}
+
+.modal-content .close-button:hover {
+	background-color: #cf285a;
+}
+
+.modal-content h3 {
+	margin-bottom: 0.5rem;
+}
+
+.modal-content strong {
+	color: #cf285a;
+}
+
+.modal-content ul li {
+	margin-bottom: 0.5rem;
+	margin-left: 1rem;
 }
 
 /* Game objects */

@@ -38,6 +38,34 @@ playBtn.addEventListener('click', () => {
 
 howToPlayBtn.addEventListener('click', () => {
 	console.log('How to Play button clicked');
+	// Create modal to display for rules & instructions
+	const modal = document.createElement('div');
+	modal.classList.add('modal');
+	modal.innerHTML = `
+		<div class="modal-content">
+			<span class="close-button">&times;</span>
+			<div class="modal-header">
+				<h2 style="text-align: center;">Rules & How to Play</h2>
+				<p>Raining cats is a game inspired by the classic Connect Four, where players aim to connect four of their cats in a row vertically, horizontally, or diagonally.</p>
+				<br>
+				<p>The twist is that each player has access to 3 special abilities that can be used once per game to change the course of play.</p>
+				<br>
+				<h3>Special Abilities:</h3>
+				<ul>
+					<li><strong>Block:</strong> Drop a "block" chip onto the board that prevents either player from placing a chip in that spot. The block chip will rest on the first chip it hits, or the bottom of the board, and will stay the rest of the game.</li>
+					<li><strong>Scratch:</strong> Removes 1 of your opponent's chips from the board.</li>
+					<li><strong>Shake:</strong> Shakes the board, removing up to 3 chips randomly chosen on the board. Shake only removes chips that do not have other chips on top of them.</li>
+				</ul>
+			</div>
+		</div>
+	`;
+	document.body.appendChild(modal);
+
+	// Close modal when clicking on close button
+	const closeButton = modal.querySelector('.close-button');
+	closeButton.addEventListener('click', () => {
+		modal.remove();
+	});
 });
 
 audioToggleBtn.addEventListener('click', () => {
