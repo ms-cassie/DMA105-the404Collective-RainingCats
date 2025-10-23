@@ -4,10 +4,10 @@ let intervalIdMoveCatRain;
 let intervalIdRemoveCatRain;
 let intervalIdMenuAnimation;
 
-// Add check for game state, only play during main menu scene
+// Add check for game state, only play during main menu & player select scenes
 let checkGameStateForAnimations = () => {
-	if (gameState.activeScene !== 'mainMenu') {
-		// Stop animations if not in main menu
+	if (gameState.activeScene === 'game' || gameState.activeScene === 'gameOver') {
+		// Stop animations if not in main menu or player select
 		clearInterval(intervalIdCreateCatRain);
 		clearInterval(intervalIdMenuAnimation);
 	}
@@ -89,15 +89,22 @@ intervalIdMoveCatRain = setInterval(moveRainCatChips, 100);
 intervalIdRemoveCatRain = setInterval(removeRainCatChips, 100);
 
 // Timers to add/remove the animate-menu class to the main menu
-const menuContent = document.querySelector('#menu-content');
+const mainMenuContent = document.querySelector('#menu-content');
+const chipSelectContent = document.querySelector('#chip-select-content');
 
 let animateMenu = () => {
-	if (menuContent.classList.contains('animate-menu')) {
-		menuContent.classList.remove('animate-menu');
+
+	if (mainMenuContent.classList.contains('animate-menu')) {
+		mainMenuContent.classList.remove('animate-menu');
 	} else {
-		menuContent.classList.add('animate-menu');
+		mainMenuContent.classList.add('animate-menu');
+	}
+
+	if (chipSelectContent.classList.contains('animate-menu')) {
+		chipSelectContent.classList.remove('animate-menu');
+	} else {
+		chipSelectContent.classList.add('animate-menu');
 	}
 };
 
-// Change the animation to swing 3 degrees left and right every second
 intervalIdMenuAnimation = setInterval(animateMenu, 500);

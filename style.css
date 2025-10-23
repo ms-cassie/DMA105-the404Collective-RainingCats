@@ -26,6 +26,24 @@ body {
 	transform: scale(1.03);
 }
 
+.btn {
+	padding: 1rem;
+	font-size: 1.2rem;
+	border-bottom: 5px solid #550a23;
+	border-radius: 0.5rem;
+	background-color: #801531;
+	color: white;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	transition: transform 0.2s;
+	box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+	background-color: #cf285a;
+	transform: scale(1.05);
+}
+
 /* MODAL STYLES */
 .modal {
 	position: fixed;
@@ -113,7 +131,10 @@ body {
 
 
 /* GAME MAIN MENU */
-#scene-main-menu {
+#scene-main-menu,
+#scene-chip-select,
+#scene-game,
+#scene-game-over {
 	text-align: center;
 	color: white;
 }
@@ -123,7 +144,7 @@ body {
 	border: 5px dashed whitesmoke;
 	padding: 3rem;
 	border-radius: 1rem;
-	box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
 
 	transition: transform 1s;
 }
@@ -142,20 +163,146 @@ body {
 	margin: 0 auto;
 }
 
-#menu-buttons button {
-	padding: 1rem;
-	font-size: 1.2rem;
-	border-bottom: 5px solid #550a23;
-	border-radius: 0.5rem;
-	background-color: #801531;
-	color: white;
-	cursor: pointer;
-	transition: background-color 0.3s;
-	transition: transform 0.2s;
-	box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+/* CHARACTER SELECT MENU */
+#scene-chip-select #chip-select-content {
+	background-color: #0182a7;
+	border: 5px dashed whitesmoke;
+	padding: 3rem;
+	border-radius: 1rem;
+	box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
+
+	transition: transform 1s;
 }
 
-#menu-buttons button:hover {
-	background-color: #cf285a;
-	transform: scale(1.05);
+#chip-select-content h2 {
+	margin-bottom: 1rem;
+	font-size: 2.5rem;
+}
+
+#chip-select-content hr {
+	color: white;
+}
+
+#chip-options {
+	margin-top: 2rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2rem;
+}
+
+#chip-options h3 {
+	font-size: 1.5rem;
+}
+
+#chip-options .cat-chip {
+	width: 100px;
+	height: 100px;
+	background-size: cover;
+	cursor: pointer;
+	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+	border-radius: 50%;
+
+	transition: all 100ms;
+}
+
+#chip-options .cat-chip.unavailable {
+	filter: grayscale(1);
+	transform: none;
+}
+
+#chip-options .cat-chip.unavailable:hover {
+	transform: none;
+	cursor: not-allowed;
+}
+
+#chip-options .cat-chip:hover {
+	transform: scale(1.1);
+}
+
+#chip-options .cat-chip.animate-chip {
+	transform: translateY(-5px);
+}
+
+#red-team {
+	color: #cf285a;
+	font-weight: bold;
+	font-size: 1.2rem;
+}
+
+#red-team hr {
+	border-color: #cf285a;
+}
+
+#blue-team {
+	color: #285acf;
+	font-weight: bold;
+	font-size: 1.2rem;
+}
+
+#blue-team hr {
+	border-color: #285acf;
+}
+
+#red-team,
+#blue-team {
+	background-color: #b9d4ab;
+	padding: 2rem;
+	border-radius: 1rem;
+	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+#red-team p,
+#blue-team p {
+	margin-bottom: 1rem;
+}
+
+#red-team hr,
+#blue-team hr {
+	margin-bottom: 1rem;
+}
+
+.chip-options-grid {
+	display: flex;
+	gap: 2rem;
+}
+
+/* RED CHARACTERS */
+#chip-red-options #red-chip-1 {
+	background-image: url('images/cat-chips/catchip-red-1.png');
+}
+#chip-red-options #red-chip-2 {
+	background-image: url('images/cat-chips/catchip-red-2.png');
+}
+#chip-red-options #red-chip-3 {
+	background-image: url('images/cat-chips/catchip-red-3.png');
+}
+#chip-red-options #red-chip-4 {
+	background-image: url('images/cat-chips/catchip-red-4.png');
+}
+#chip-red-options #red-chip-5 {
+	background-image: url('images/cat-chips/catchip-red-5.png');
+}
+#chip-red-options #red-chip-6 {
+	background-image: url('images/cat-chips/catchip-red-6.png');
+}
+
+/* BLUE CHARACTERS */
+#chip-blue-options #blue-chip-1 {
+	background-image: url('images/cat-chips/catchip-blue-1.png');
+}
+#chip-blue-options #blue-chip-2 {
+	background-image: url('images/cat-chips/catchip-blue-2.png');
+}
+#chip-blue-options #blue-chip-3 {
+	background-image: url('images/cat-chips/catchip-blue-3.png');
+}
+#chip-blue-options #blue-chip-4 {
+	background-image: url('images/cat-chips/catchip-blue-4.png');
+}
+#chip-blue-options #blue-chip-5 {
+	background-image: url('images/cat-chips/catchip-blue-5.png');
+}
+#chip-blue-options #blue-chip-6 {
+	background-image: url('images/cat-chips/catchip-blue-6.png');
 }

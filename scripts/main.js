@@ -1,14 +1,14 @@
 // Get HTML Elements
 // Game Scenes
 const mainMenu = document.getElementById('scene-main-menu');
-const playerSelectScene = document.getElementById('scene-player-select');
+const chipSelectScene = document.getElementById('scene-chip-select');
 const gameScene = document.getElementById('scene-game');
 const gameOverScene = document.getElementById('scene-game-over');
 
 // Main Menu Buttons
 const playBtn = document.getElementById('btn-play-game');
 const howToPlayBtn = document.getElementById('btn-how-to-play');
-const audioToggleBtn = document.getElementById('btn-toggle-audio');
+const audioToggleBtns = document.querySelectorAll('.btn-toggle-audio');
 
 // Game State
 let gameState = {
@@ -17,6 +17,8 @@ let gameState = {
 	isGameRunning: false,
 	isAudioEnabled: false,
 	activeScene: 'mainMenu',
+	player1Chip: null,
+	player2Chip: null,
 };
 
 // Add Event Listeners
@@ -30,14 +32,13 @@ playBtn.addEventListener('click', () => {
 	if (!gameState.isGameRunning) {
 		gameState.isGameRunning = true;
 		mainMenu.style.display = 'none';
-		playerSelectScene.style.display = 'block';
-		gameState.activeScene = 'playerSelectScene';
+		chipSelectScene.style.display = 'block';
+		gameState.activeScene = 'chipSelectScene';
 	}
 
 });
 
 howToPlayBtn.addEventListener('click', () => {
-	console.log('How to Play button clicked');
 	// Create modal to display for rules & instructions
 	const modal = document.createElement('div');
 	modal.classList.add('modal');
@@ -71,13 +72,16 @@ howToPlayBtn.addEventListener('click', () => {
 	});
 });
 
-audioToggleBtn.addEventListener('click', () => {
-	toggleAudio();
+// Audio Toggle Buttons
+audioToggleBtns.forEach((btn) => {
+	btn.addEventListener('click', () => {
+		toggleAudio();
 
-	// Start game soundtrack if audio is enabled
-	if (gameState.isAudioEnabled) {
-		startSoundtrack();
-	}
+		// Start game soundtrack if audio is enabled
+		if (gameState.isAudioEnabled) {
+			startSoundtrack();
+		}
+	});
 });
 
 // Audio controls
@@ -98,10 +102,12 @@ let toggleAudio = () => {
 	gameState.isAudioEnabled = !gameState.isAudioEnabled;
 
 	// Change button based on sound playing
-	if (gameState.isAudioEnabled) {
-		audioToggleBtn.innerText = 'Sound: On';
-	} else {
-		audioToggleBtn.innerText = 'Sound: Off';
+	for (let audioToggleBtn of audioToggleBtns) {
+		if (gameState.isAudioEnabled) {
+			audioToggleBtn.innerText = 'Sound: On';
+		} else {
+			audioToggleBtn.innerText = 'Sound: Off';
+		}
 	}
 };
 
@@ -110,3 +116,33 @@ let startSoundtrack = (loop = true, volume = 0.1) => {
 	soundtrack.volume = volume;
 	soundtrack.play();
 };
+
+
+// Add event listeners and functions for the cat chip selection
+const catChips = document.querySelectorAll('.cat-chip');
+
+catChips.forEach((chip) => {
+	chip.addEventListener('click', () => {
+		if (gameState.player1Chip === null) {
+			gameState.player1Chip = chip.id;
+
+			const siblings = chip.parentNode.children;
+			for (let sibling of siblings) {
+				sibling.classList.add('unavailable');
+			}
+
+		} else {
+			if (chip.classList.contains('unavailable')) {
+				// Do nothing if chip is unavailable
+				return;
+			}
+
+			gameState.player2Chip = chip.id;
+
+			// Both players have selected their chips, proceed to the game scene
+			chipSelectScene.style.display = 'none';
+			gameScene.style.display = 'block';
+			gameState.activeScene = 'gameScene';
+		}
+	});
+});
