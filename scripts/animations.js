@@ -1,3 +1,26 @@
+// Global variables for animation intervals
+let intervalIdCreateCatRain;
+let intervalIdMoveCatRain;
+let intervalIdRemoveCatRain;
+let intervalIdMenuAnimation;
+
+// Add check for game state, only play during main menu scene
+let checkGameStateForAnimations = () => {
+	if (gameState.activeScene !== 'mainMenu') {
+		// Stop animations if not in main menu
+		clearInterval(intervalIdCreateCatRain);
+		clearInterval(intervalIdMenuAnimation);
+	}
+
+	if (gameState.activeScene !== 'mainMenu' && gameState.numRainingCatChips === 0) {
+		// Also clear move/remove intervals if no cat chips are left
+		clearInterval(intervalIdMoveCatRain);
+		clearInterval(intervalIdRemoveCatRain);
+	}
+};
+
+setInterval(checkGameStateForAnimations, 1000);
+
 // Rain Cat Chips in background (Main Menu only)
 const createRainCatChips = () => {
 	// Limit the number of cat chips on screen
@@ -61,9 +84,9 @@ const removeRainCatChips = () => {
 };
 
 // Start the background rain on the main menu
-setInterval(createRainCatChips, 250);
-setInterval(moveRainCatChips, 100);
-setInterval(removeRainCatChips, 100);
+intervalIdCreateCatRain = setInterval(createRainCatChips, 250);
+intervalIdMoveCatRain = setInterval(moveRainCatChips, 100);
+intervalIdRemoveCatRain = setInterval(removeRainCatChips, 100);
 
 // Timers to add/remove the animate-menu class to the main menu
 const menuContent = document.querySelector('#menu-content');
@@ -77,4 +100,4 @@ let animateMenu = () => {
 };
 
 // Change the animation to swing 3 degrees left and right every second
-setInterval(animateMenu, 500);
+intervalIdMenuAnimation = setInterval(animateMenu, 500);
