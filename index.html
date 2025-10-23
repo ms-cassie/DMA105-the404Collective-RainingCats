@@ -21,20 +21,53 @@
 				<small>~ The 404 Collective ~</small>
 				<h1 id="game-title">Raining Cats</h1>
 				<div id="menu-buttons">
-					<button id="btn-play-game">Play</button>
-					<button id="btn-how-to-play">How to Play</button>
-					<button id="btn-toggle-audio">Sound: Off</button>
+					<button id="btn-play-game" class="btn">Play</button>
+					<button id="btn-how-to-play" class="btn">How to Play</button>
+					<button class="btn btn-toggle-audio">Sound: Off</button>
 				</div>
 			</div>
 		</div>
 
-		<!-- Player Select -->
-		<div id="scene-player-select" class="hidden">
-			<h2>Player Select</h2>
+		<!-- Chip Select -->
+		<div id="scene-chip-select" class="hidden">
+			<div id="chip-select-content">
+				<h2>Chip Selection</h2>
+				<hr>
+				<div id="chip-options">
+					<h3>Player 1 - Select your chip!</h3>
+					<small>*Once player 1 has selected a chip from a team, player 2 must select a chip from the other team*</small>
+					<div id="red-team">
+						<p>Red Team</p>
+						<hr>
+						<div id="chip-red-options" class="chip-options-grid">
+							<div class="cat-chip" id="red-chip-1"></div>
+							<div class="cat-chip" id="red-chip-2"></div>
+							<div class="cat-chip" id="red-chip-3"></div>
+							<div class="cat-chip" id="red-chip-4"></div>
+							<div class="cat-chip" id="red-chip-5"></div>
+							<div class="cat-chip" id="red-chip-6"></div>
+						</div>
+					</div>
+					<div id="blue-team">
+						<p>Blue Team</p>
+						<hr>
+						<div id="chip-blue-options" class="chip-options-grid">
+							<div class="cat-chip" id="blue-chip-1"></div>
+							<div class="cat-chip" id="blue-chip-2"></div>
+							<div class="cat-chip" id="blue-chip-3"></div>
+							<div class="cat-chip" id="blue-chip-4"></div>
+							<div class="cat-chip" id="blue-chip-5"></div>
+							<div class="cat-chip" id="blue-chip-6"></div>
+						</div>
+					</div>
+					<button class="btn btn-toggle-audio">Sound: Off</button>
+				</div>
+			</div>
 		</div>
 
 		<!-- Game -->
 		<div id="scene-game" class="hidden">
+			<h2>Game</h2>
 			<canvas id="game"></canvas>
 		</div>
 
