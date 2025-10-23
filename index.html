@@ -15,28 +15,37 @@
 
 	<div id="game-frame">
 
-		<div id="main-menu">
-			<small>~ The 404 Collective ~</small>
-			<h1 id="game-title">Raining Cats</h1>
-			<button id="btn-play-game">Play</button>
-			<button id="btn-how-to-play">How to Play</button>
+		<!-- Main Menu -->
+		<div id="scene-main-menu">
+			<div id="menu-content">
+				<small>~ The 404 Collective ~</small>
+				<h1 id="game-title">Raining Cats</h1>
+				<div id="menu-buttons">
+					<button id="btn-toggle-audio">Sound: Off</button>
+					<button id="btn-play-game">Play</button>
+					<button id="btn-how-to-play">How to Play</button>
+				</div>
+			</div>
 		</div>
 
-		<div id="player-select" class="hidden">
+		<!-- Player Select -->
+		<div id="scene-player-select" class="hidden">
 			<h2>Player Select</h2>
 		</div>
 
-		<div id="game" class="hidden">
-			<h2>Game</h2>
+		<!-- Game -->
+		<div id="scene-game" class="hidden">
+			<canvas id="game"></canvas>
 		</div>
 
-		<div id="game-over" class="hidden">
+		<!-- Game Over -->
+		<div id="scene-game-over" class="hidden">
 			<h2>Game Over</h2>
 		</div>
 
 	</div>
 
-
+	<!-- JavaScript -->
 	<script src="script.js"></script>
 </body>
 </html>
