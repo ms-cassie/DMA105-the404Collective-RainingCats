@@ -29,9 +29,9 @@ playBtn.addEventListener('click', () => {
 	// Start the game if not already running
 	if (!gameState.isGameRunning) {
 		gameState.isGameRunning = true;
-		// mainMenu.style.display = 'none';
-		// playerSelectScene.style.display = 'block';
-		// gameState.activeScene = 'playerSelectScene';
+		mainMenu.style.display = 'none';
+		playerSelectScene.style.display = 'block';
+		gameState.activeScene = 'playerSelectScene';
 	}
 
 });
@@ -57,7 +57,7 @@ howToPlayBtn.addEventListener('click', () => {
 					<li><strong>Shake:</strong> Shakes the board, removing up to 3 chips randomly chosen on the board. Shake only removes chips that do not have other chips on top of them.</li>
 				</ul>
 				<h3>Winning the Game:</h3>
-				<p>The first player to connect four of their cats in a row wins! If the board fills up without any player connecting four, the player who has the least amount of total time for their turns is the winner.</p>
+				<p>The first player to connect four of their cats in a row wins! If the board fills up without any player connecting four, the player with the least amount of total time over all of their turns is the winner.</p>
 				<p>Enjoy the game and may the best cat win!</p>
 			</div>
 		</div>

@@ -22,7 +22,7 @@ body {
 }
 
 .animate-menu {
-	transition: transform 100ms;
+	transition: transform 1s;
 	transform: scale(1.03);
 }
 
