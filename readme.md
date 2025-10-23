@@ -1,0 +1,2 @@
+# Raining Cats
+Get ready for a purr-fectly fun game of strategy and cuteness. Be the first player to cat-nect fur of your cat tokens in row, horizontally, vertically, or diagonally. Choose your cat and take turns dropping your cat chip into the grid by selecting a column. Watch for patterns and try to block your opponent with your special abilities while planning your own fur-in-a-row. The first player to cat-nect fur wins the round! Play it with your fur-iends and have fun, right meow!
