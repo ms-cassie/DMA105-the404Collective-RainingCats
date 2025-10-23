@@ -47,15 +47,18 @@ howToPlayBtn.addEventListener('click', () => {
 			<div class="modal-header">
 				<h2 style="text-align: center;">Rules & How to Play</h2>
 				<p>Raining cats is a game inspired by the classic Connect Four, where players aim to connect four of their cats in a row vertically, horizontally, or diagonally.</p>
-				<br>
 				<p>The twist is that each player has access to 3 special abilities that can be used once per game to change the course of play.</p>
-				<br>
+				<h3>Controls:</h3>
+				<p>Use the arrow keys ← and → to move the chip to the left or right, and spacebar  to drop the chip.</p>
 				<h3>Special Abilities:</h3>
 				<ul>
 					<li><strong>Block:</strong> Drop a "block" chip onto the board that prevents either player from placing a chip in that spot. The block chip will rest on the first chip it hits, or the bottom of the board, and will stay the rest of the game.</li>
 					<li><strong>Scratch:</strong> Removes 1 of your opponent's chips from the board.</li>
 					<li><strong>Shake:</strong> Shakes the board, removing up to 3 chips randomly chosen on the board. Shake only removes chips that do not have other chips on top of them.</li>
 				</ul>
+				<h3>Winning the Game:</h3>
+				<p>The first player to connect four of their cats in a row wins! If the board fills up without any player connecting four, the player who has the least amount of total time for their turns is the winner.</p>
+				<p>Enjoy the game and may the best cat win!</p>
 			</div>
 		</div>
 	`;

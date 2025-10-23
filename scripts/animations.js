@@ -64,3 +64,17 @@ const removeRainCatChips = () => {
 setInterval(createRainCatChips, 250);
 setInterval(moveRainCatChips, 100);
 setInterval(removeRainCatChips, 100);
+
+// Timers to add/remove the animate-menu class to the main menu
+const menuContent = document.querySelector('#menu-content');
+
+let animateMenu = () => {
+	if (menuContent.classList.contains('animate-menu')) {
+		menuContent.classList.remove('animate-menu');
+	} else {
+		menuContent.classList.add('animate-menu');
+	}
+};
+
+// Change the animation to swing 3 degrees left and right every second
+setInterval(animateMenu, 500);
