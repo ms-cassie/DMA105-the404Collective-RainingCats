@@ -131,6 +131,13 @@ catChips.forEach((chip) => {
 				sibling.classList.add('unavailable');
 			}
 
+			// Update player prompt
+			const playerPrompt = document.getElementById('chip-options').children[0];
+			playerPrompt.innerText = "Player 2 - Select Your Cat Chip!";
+
+			// TODO:
+			// APPEND a message under the chip with 'player 1' text & a highlight around the now grayed out chip of the team color
+
 		} else {
 			if (chip.classList.contains('unavailable')) {
 				// Do nothing if chip is unavailable
