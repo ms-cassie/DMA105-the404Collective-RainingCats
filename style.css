@@ -12,6 +12,7 @@
 
 body {
 	background-color: var(--main-bg-color);
+	overflow: hidden;
 }
 
 /* Utility classes */
@@ -19,6 +20,19 @@ body {
 	display: none;
 }
 
+/* Game objects */
+.raining-cat-chip {
+	z-index: -1;
+	opacity: 0.5;
+	position: absolute;
+	top: -50px;
+	width: 50px;
+	height: 50px;
+	background-size: cover;
+	transition: transform 5s linear;
+}
+
+/* General Game Layout */
 #game-frame {
 	display: flex;
 	align-items: center;
@@ -28,11 +42,30 @@ body {
 	min-height: 60vh;
 }
 
-#main-menu {
+
+/* GAME MAIN MENU */
+#scene-main-menu {
 	text-align: center;
+	color: white;
+}
+
+#scene-main-menu #menu-content {
+	background-color: #0182a7;
+	border: 5px dashed whitesmoke;
+	padding: 3rem;
+	border-radius: 1rem;
 }
 
 #game-title {
 	font-family: 'Peralta', serif;
 	font-size: 4rem;
+	margin-bottom: 3rem;
+}
+
+#menu-buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	width: 200px;
+	margin: 0 auto;
 }
