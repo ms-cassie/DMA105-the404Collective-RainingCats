@@ -126,8 +126,10 @@ audioToggleBtns.forEach((btn) => {
 });
 
 // Button sounds
-const buttonHoverSound = new Audio('../audio/sfx/hover-sound_bubble-pop.mp3');
-const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3');
+// const buttonHoverSound = new Audio('../audio/sfx/hover-sound_bubble-pop.mp3');
+const buttonHoverSound = new Audio('https://github.com/ms-cassie/DMA105-the404Collective-RainingCats/blob/main/audio/sfx/hover-sound_bubble-pop.mp3?raw=true');
+// const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3');
+const buttonClickSound = new Audio('https://github.com/ms-cassie/DMA105-the404Collective-RainingCats/blob/main/audio/sound.mp3?raw=true');
 
 // Configurations
 buttonHoverSound.volume = 0.5;
