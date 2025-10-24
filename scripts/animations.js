@@ -6,9 +6,8 @@ let intervalIdMenuAnimation;
 
 // Add check for game state, only play during main menu & player select scenes
 let checkGameStateForAnimations = () => {
-	if (gameState.activeScene === 'game' || gameState.activeScene === 'gameOver') {
+	if (gameState.activeScene === 'gameScene' || gameState.activeScene === 'gameOver') {
 		// Stop animations if not in main menu or player select
-		clearInterval(intervalIdCreateCatRain);
 		clearInterval(intervalIdMenuAnimation);
 	}
 

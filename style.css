@@ -19,7 +19,7 @@ body {
 
 /* Utility classes */
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .hide {
@@ -47,6 +47,28 @@ body {
 .btn:hover {
 	background-color: #cf285a;
 	transform: scale(1.05);
+}
+
+.btn-disabled {
+	background-color: #808080;
+	border-bottom: 5px solid #383838;
+}
+
+.btn-disabled:hover {
+	transition: none;
+	transform: none;
+	background-color: #808080;
+	border-bottom: 5px solid #383838;
+	cursor: not-allowed;
+}
+
+.btn-disabled:active {
+	border-style: outset;
+	transition: none;
+	transform: none;
+	background-color: #808080;
+	border-bottom: 5px solid #383838;
+	cursor: not-allowed;
 }
 
 /* MODAL STYLES */
@@ -127,11 +149,11 @@ body {
 /* General Game Layout */
 #game-frame {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
 
 	min-width: 100vw;
-	min-height: 90vh;
+	min-height: 100vh;
 }
 
 
@@ -142,6 +164,10 @@ body {
 #scene-game-over {
 	text-align: center;
 	color: white;
+}
+
+#scene-main-menu {
+	margin-top: 10rem;
 }
 
 #scene-main-menu #menu-content {
@@ -169,6 +195,10 @@ body {
 }
 
 /* CHARACTER SELECT MENU */
+#scene-chip-select {
+	margin-top: 3rem;
+}
+
 #scene-chip-select #chip-select-content {
 	background-color: #0182a7;
 	border: 5px dashed whitesmoke;
@@ -319,4 +349,59 @@ body {
 }
 #chip-blue-options #blue-chip-6 {
 	background-image: url('images/cat-chips/catchip-blue-6.png');
+}
+
+/* GAME SCENE */
+#scene-game {
+	margin-top: 1rem;
+	width: 100vw;
+	height: 100vh;
+}
+
+#game-panel {
+	width: 90%;
+	height: 95%;
+	margin: 0 auto;
+
+	background-color: #0182a7;
+	border: 5px dashed whitesmoke;
+	padding: 3rem;
+	border-radius: 1rem;
+	box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+
+	position: relative;
+}
+
+#game-panel h2 {
+	font-family: 'Peralta', serif;
+	font-size: 2rem;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#game-board {
+	width: 50%;
+	height: 70%;
+	background-image: url('images/game-board.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+#game-buttons {
+	display: flex;
+	gap: 1.5rem;
+}
+
+#player-move-selection {
+	position: absolute;
+
+	top: 0;
+	left: 0;
 }
