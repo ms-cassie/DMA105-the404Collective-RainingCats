@@ -126,8 +126,8 @@ audioToggleBtns.forEach((btn) => {
 });
 
 // Button sounds
-const buttonHoverSound = new Audio('../audio/sfx/hover-sound_bubble-pop.mp3');
-const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3');
+const buttonHoverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/hover-sound_bubble-pop.mp3');
+const buttonClickSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/button-click_select-sound.mp3');
 
 // Configurations
 buttonHoverSound.volume = 0.5;
