@@ -31,7 +31,7 @@ let gameState = {
 };
 
 // Audio Soundtrack controls
-const soundtrack = new Audio('../audio/soundtrack/soundtrack-1.mp3');
+const soundtrack = new Audio('/DMA105-the404Collective-RainingCats/audio/soundtrack/soundtrack-1.mp3');
 
 let toggleAudio = () => {
 	// Check if audio is running
