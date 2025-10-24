@@ -13,6 +13,10 @@ const audioToggleBtns = document.querySelectorAll('.btn-toggle-audio');
 // All buttons
 const allButtons = document.querySelectorAll('.btn-sound');
 
+// Chip Select Elements
+const playerPrompt = document.getElementById('chip-options').children[0];
+const startGameBtn = document.getElementById('btn-start-game');
+
 // Game State
 let gameState = {
 	numRainingCatChips: 0,
@@ -24,6 +28,39 @@ let gameState = {
 	player2Select: false,
 	player1Chip: null,
 	player2Chip: null,
+};
+
+// Audio Soundtrack controls
+const soundtrack = new Audio('../audio/soundtrack/soundtrack-1.mp3');
+
+let toggleAudio = () => {
+	// Check if audio is running
+	if (gameState.isAudioEnabled) {
+		soundtrack.pause();
+	}
+
+	// Check if game is running
+	if (!gameState.isAudioEnabled && gameState.isGameRunning) {
+		startSoundtrack();
+	}
+
+	// Toggle audio state
+	gameState.isAudioEnabled = !gameState.isAudioEnabled;
+
+	// Change button based on sound playing
+	for (let audioToggleBtn of audioToggleBtns) {
+		if (gameState.isAudioEnabled) {
+			audioToggleBtn.innerText = 'Sound: On';
+		} else {
+			audioToggleBtn.innerText = 'Sound: Off';
+		}
+	}
+};
+
+let startSoundtrack = (loop = true, volume = 0.1) => {
+	soundtrack.loop = loop;
+	soundtrack.volume = volume;
+	soundtrack.play();
 };
 
 // Add Event Listeners
@@ -114,40 +151,6 @@ allButtons.forEach((button) => {
 	});
 });
 
-// Audio controls
-const soundtrack = new Audio('../audio/soundtrack/soundtrack-1.mp3');
-
-let toggleAudio = () => {
-	// Check if audio is running
-	if (gameState.isAudioEnabled) {
-		soundtrack.pause();
-	}
-
-	// Check if game is running
-	if (!gameState.isAudioEnabled && gameState.isGameRunning) {
-		startSoundtrack();
-	}
-
-	// Toggle audio state
-	gameState.isAudioEnabled = !gameState.isAudioEnabled;
-
-	// Change button based on sound playing
-	for (let audioToggleBtn of audioToggleBtns) {
-		if (gameState.isAudioEnabled) {
-			audioToggleBtn.innerText = 'Sound: On';
-		} else {
-			audioToggleBtn.innerText = 'Sound: Off';
-		}
-	}
-};
-
-let startSoundtrack = (loop = true, volume = 0.1) => {
-	soundtrack.loop = loop;
-	soundtrack.volume = volume;
-	soundtrack.play();
-};
-
-
 // Add event listeners and functions for the cat chip selection
 const catChips = document.querySelectorAll('.cat-chip');
 
@@ -160,7 +163,6 @@ catChips.forEach((chip) => {
 			gameState.player2Select = true;
 
 			// Update player prompt
-			const playerPrompt = document.getElementById('chip-options').children[0];
 			playerPrompt.innerText = "Player 2 - Select Your Cat Chip!";
 
 			// Update selection menu
@@ -187,6 +189,9 @@ catChips.forEach((chip) => {
 			gameState.player1Select = false;
 			gameState.player2Select = false;
 
+			// Update player prompt
+			playerPrompt.innerText = "Selections Complete! Click 'Start' to Begin the Game.";
+
 			// Update selection menu
 			// Gray out chips and disable button sounds
 			const parentSiblings = chip.parentNode.parentNode.children;
@@ -207,4 +212,18 @@ catChips.forEach((chip) => {
 
 		}
 	});
+});
+
+
+// Add event listener for Start Game button
+startGameBtn.addEventListener('click', () => {
+	// Only proceed if both players have selected their chips
+	if (gameState.player1Select === true || gameState.player2Select === true) {
+		return;
+	}
+
+	// Move to the next scene
+	chipSelectScene.style.display = 'none';
+	gameScene.style.display = 'block';
+	gameState.activeScene = 'gameScene';
 });
