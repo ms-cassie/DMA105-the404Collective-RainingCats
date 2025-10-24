@@ -48,10 +48,10 @@ const createRainCatChips = () => {
 	catChip.style.left = Math.random() * 100 + 'vw';
 
 	// Initialize vertical position for transform-based movement
-	catChip.dataset.y = '-50';
+	catChip.dataset.y = '-100';
 
 	// Give each chip a random rotation and persist it
-	const rotation = (Math.random() * 60) - 60; // -60deg to +60deg
+	const rotation = (Math.random() * 180) - 180; // -1800deg to +180deg
 	catChip.dataset.rot = rotation.toFixed(1);
 	catChip.style.transform = `translateY(${catChip.dataset.y}px) rotate(${catChip.dataset.rot}deg)`;
 };
