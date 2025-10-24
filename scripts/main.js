@@ -10,6 +10,9 @@ const playBtn = document.getElementById('btn-play-game');
 const howToPlayBtn = document.getElementById('btn-how-to-play');
 const audioToggleBtns = document.querySelectorAll('.btn-toggle-audio');
 
+// All buttons
+const allButtons = document.querySelectorAll('.btn-sound');
+
 // Game State
 let gameState = {
 	numRainingCatChips: 0,
@@ -17,6 +20,8 @@ let gameState = {
 	isGameRunning: false,
 	isAudioEnabled: false,
 	activeScene: 'mainMenu',
+	player1Select: false,
+	player2Select: false,
 	player1Chip: null,
 	player2Chip: null,
 };
@@ -28,14 +33,13 @@ playBtn.addEventListener('click', () => {
 		startSoundtrack();
 	}
 
-	// Start the game if not already running
-	if (!gameState.isGameRunning) {
-		gameState.isGameRunning = true;
-		mainMenu.style.display = 'none';
-		chipSelectScene.style.display = 'block';
-		gameState.activeScene = 'chipSelectScene';
-	}
+	// Move to the next scene
+	mainMenu.style.display = 'none';
+	chipSelectScene.style.display = 'block';
+	gameState.activeScene = 'chipSelectScene';
 
+	// Set player 1 select to true
+	gameState.player1Select = true;
 });
 
 howToPlayBtn.addEventListener('click', () => {
@@ -84,8 +88,34 @@ audioToggleBtns.forEach((btn) => {
 	});
 });
 
+// Button sounds
+const buttonHoverSound = new Audio('../audio/sfx/hover-sound_bubble-pop.mp3');
+const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3');
+
+// Configurations
+buttonHoverSound.volume = 0.5;
+buttonClickSound.volume = 0.5;
+
+allButtons.forEach((button) => {
+	// HOVER
+	button.addEventListener('mouseenter', () => {
+		if (gameState.isAudioEnabled && !button.classList.contains('btn-sound-disabled')) {
+			buttonHoverSound.currentTime = 0;
+			buttonHoverSound.play();
+		}
+	});
+
+	// CLICK
+	button.addEventListener('click', () => {
+		if (gameState.isAudioEnabled && !button.classList.contains('btn-sound-disabled')) {
+			buttonClickSound.currentTime = 0;
+			buttonClickSound.play();
+		}
+	});
+});
+
 // Audio controls
-const soundtrack = new Audio('audio/soundtrack/soundtrack-1.mp3');
+const soundtrack = new Audio('../audio/soundtrack/soundtrack-1.mp3');
 
 let toggleAudio = () => {
 	// Check if audio is running
@@ -123,33 +153,58 @@ const catChips = document.querySelectorAll('.cat-chip');
 
 catChips.forEach((chip) => {
 	chip.addEventListener('click', () => {
-		if (gameState.player1Chip === null) {
+		if (gameState.player1Select === true) {
+			// Set game state
 			gameState.player1Chip = chip.id;
-
-			const siblings = chip.parentNode.children;
-			for (let sibling of siblings) {
-				sibling.classList.add('unavailable');
-			}
+			gameState.player1Select = false;
+			gameState.player2Select = true;
 
 			// Update player prompt
 			const playerPrompt = document.getElementById('chip-options').children[0];
 			playerPrompt.innerText = "Player 2 - Select Your Cat Chip!";
 
-			// TODO:
-			// APPEND a message under the chip with 'player 1' text & a highlight around the now grayed out chip of the team color
-
-		} else {
-			if (chip.classList.contains('unavailable')) {
-				// Do nothing if chip is unavailable
-				return;
+			// Update selection menu
+			// Gray out chips and disable button sounds
+			const parentSiblings = chip.parentNode.parentNode.children;
+			for (let sibling of parentSiblings) {
+				for (let child of sibling.children) {
+					if (child !== chip) {
+						child.classList.add('unavailable');
+					} else {
+						child.classList.add('selected');
+					}
+					child.classList.add('btn-sound-disabled');
+				}
 			}
 
-			gameState.player2Chip = chip.id;
+			// Show player 1 selection text
+			chip.parentElement.children[1].classList.remove('hide');
 
-			// Both players have selected their chips, proceed to the game scene
-			chipSelectScene.style.display = 'none';
-			gameScene.style.display = 'block';
-			gameState.activeScene = 'gameScene';
+
+		} else if (gameState.player2Select === true) {
+			// Set game state
+			gameState.player2Chip = chip.id;
+			gameState.player1Select = false;
+			gameState.player2Select = false;
+
+			// Update selection menu
+			// Gray out chips and disable button sounds
+			const parentSiblings = chip.parentNode.parentNode.children;
+			for (let sibling of parentSiblings) {
+				for (let child of sibling.children) {
+					if (child !== chip) {
+						child.classList.add('unavailable');
+					} else {
+						child.classList.add('selected');
+					}
+					child.classList.add('btn-sound-disabled');
+				}
+			}
+
+			// Show player 2 selection text
+			chip.parentElement.children[1].innerText = 'Player 2';
+			chip.parentElement.children[1].classList.remove('hide');
+
 		}
 	});
 });

@@ -22,6 +22,10 @@ body {
 	display: none;
 }
 
+.hide {
+	opacity: 0;
+}
+
 .animate-menu {
 	transition: transform 1s;
 	transform: scale(1.03);
@@ -127,7 +131,7 @@ body {
 	justify-content: center;
 
 	min-width: 100vw;
-	min-height: 75vh;
+	min-height: 90vh;
 }
 
 
@@ -213,6 +217,15 @@ body {
 }
 
 #chip-options .cat-chip.unavailable:hover {
+	transform: none;
+	cursor: not-allowed;
+}
+
+#chip-options .cat-chip.selected {
+	border: 5px solid #ffff00;
+}
+
+#chip-options .cat-chip.selected:hover {
 	transform: none;
 	cursor: not-allowed;
 }
