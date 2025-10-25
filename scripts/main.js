@@ -63,6 +63,9 @@ let gameState = {
 	player2Chip: null,
 	player1Turn: false,
 	player2Turn: false,
+	// Cumulative time tracking (milliseconds)
+	player1TimeMs: 0,
+	player2TimeMs: 0,
 	player1TurnTime: 0,
 	player2TurnTime: 0,
 	boardState: [
@@ -296,6 +299,14 @@ startGameBtn.addEventListener('click', (e) => {
 	gameScene.classList.remove('hidden');
 	gameState.activeScene = 'gameScene';
 	gameState.player1Turn = true;
+	// Reset and initialize timers for a new game
+	gameState.player1TimeMs = 0;
+	gameState.player2TimeMs = 0;
+	gameState.player1TurnTime = 0;
+	gameState.player2TurnTime = 0;
+	player1TurnTime.innerText = '0.0';
+	player2TurnTime.innerText = '0.0';
+	currentTurnStart = Date.now();
 	controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
 	profileImagePlayer1.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
 	profileImagePlayer2.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
@@ -351,6 +362,16 @@ document.addEventListener('keyup', (e) => {
 				return;
 			}
 
+			// Finalize time for the player whose turn is ending
+			const now = Date.now();
+			if (gameState.player1Turn === true) {
+				gameState.player1TimeMs += now - currentTurnStart;
+			} else if (gameState.player2Turn === true) {
+				gameState.player2TimeMs += now - currentTurnStart;
+			}
+			// Start timing the next player's turn
+			currentTurnStart = now;
+
 			if (gameState.player1Turn === true) {
 				gameState.player1Turn = false;
 				gameState.player2Turn = true;
@@ -366,14 +387,20 @@ document.addEventListener('keyup', (e) => {
 	}
 });
 
-// Timers for player turn time
+// Timers for player turn time (cumulative per player)
+let currentTurnStart = null;
 let countPlayerTurnTime = () => {
-	if (gameState.player1Turn === true) {
-		gameState.player1TurnTime += 1;
+	const nowTick = Date.now();
+
+	// Update only the active player's displayed time as base total + current run segment
+	if (gameState.player1Turn === true && currentTurnStart !== null) {
+		const totalMs = gameState.player1TimeMs + (nowTick - currentTurnStart);
+		gameState.player1TurnTime = (totalMs / 1000).toFixed(1);
 		player1TurnTime.innerText = gameState.player1TurnTime;
-	} else if (gameState.player2Turn === true) {
-		gameState.player2TurnTime += 1;
+	} else if (gameState.player2Turn === true && currentTurnStart !== null) {
+		const totalMs = gameState.player2TimeMs + (nowTick - currentTurnStart);
+		gameState.player2TurnTime = (totalMs / 1000).toFixed(1);
 		player2TurnTime.innerText = gameState.player2TurnTime;
 	}
 };
-setInterval(countPlayerTurnTime, 1000);
+setInterval(countPlayerTurnTime, 100);
