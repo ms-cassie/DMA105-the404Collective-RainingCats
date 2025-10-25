@@ -42,28 +42,28 @@
 						<hr>
 						<div id="chip-red-options" class="chip-options-grid">
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="red-chip-1"></div>
+								<div class="cat-chip btn-sound" id="red-1"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="red-chip-2"></div>
+								<div class="cat-chip btn-sound" id="red-2"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="red-chip-3"></div>
+								<div class="cat-chip btn-sound" id="red-3"></div>
 								<small class="hide">Player 1</small>
 							</div>
 
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="red-chip-4"></div>
+								<div class="cat-chip btn-sound" id="red-4"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="red-chip-5"></div>
+								<div class="cat-chip btn-sound" id="red-5"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="red-chip-6"></div>
+								<div class="cat-chip btn-sound" id="red-6"></div>
 								<small class="hide">Player 1</small>
 							</div>
 						</div>
@@ -73,27 +73,27 @@
 						<hr>
 						<div id="chip-blue-options" class="chip-options-grid">
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="blue-chip-1"></div>
+								<div class="cat-chip btn-sound" id="blue-1"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="blue-chip-2"></div>
+								<div class="cat-chip btn-sound" id="blue-2"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="blue-chip-3"></div>
+								<div class="cat-chip btn-sound" id="blue-3"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="blue-chip-4"></div>
+								<div class="cat-chip btn-sound" id="blue-4"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="blue-chip-5"></div>
+								<div class="cat-chip btn-sound" id="blue-5"></div>
 								<small class="hide">Player 1</small>
 							</div>
 							<div class="button-div">
-								<div class="cat-chip btn-sound" id="blue-chip-6"></div>
+								<div class="cat-chip btn-sound" id="blue-6"></div>
 								<small class="hide">Player 1</small>
 							</div>
 						</div>
@@ -107,13 +107,36 @@
 		<!-- Game -->
 		<div id="scene-game" class="hidden">
 			<div id="game-panel">
-				<h2>Player 1 Turn</h2>
-				<div id="player-move-selection">
-					<div id="left-arrow"></div>
-					<div id="player-chip"></div>
-					<div id="right-arrow"></div>
+				<h2 id="turn-indicator" class="animate-controls-alternate">Player 1 Turn</h2>
+				<div id="game-panel-players-board">
+					<div id="player-1-section">
+						<h3>Player 1</h3>
+						<hr>
+						<img id="player-1-profile-image" src="images/cat-chips/catchip-red-1.png" alt="Player 2 cat chip.">
+						<p>Turn Time: <span id="player-1-turn-time">0</span></p>
+					</div>
+					<div id="game-board-bg-container">
+						<!-- Game board background -->
+						<img src="images/game-board.png" alt="Image of the game board - 7 columns and 6 rows" id="game-board-bg">
+						<div id="player-move-selection">
+							<div id="left-arrow" class="animate-controls">
+								<img src="images/favicon-cat-paw.png" alt="Cat paw pointing left for left arrow">
+							</div>
+							<div id="player-chip" class="animate-player-chip">
+								<img src="images/cat-chips/catchip-red-1.png" alt="Cat Chip representing the current player">
+							</div>
+							<div id="right-arrow" class="animate-controls">
+								<img src="images/favicon-cat-paw.png" alt="Cat paw pointing right for right arrow">
+							</div>
+						</div>
+					</div>
+					<div id="player-2-section">
+						<h3>Player 2</h3>
+						<hr>
+						<img id="player-2-profile-image" src="images/cat-chips/catchip-blue-1.png" alt="Player 2 cat chip.">
+						<p>Turn Time: <span id="player-2-turn-time">0</span></p>
+					</div>
 				</div>
-				<div id="game-board"></div>
 				<div id="game-buttons">
 					<button class="btn-how-to-play btn btn-sound">How to Play</button>
 					<button class="btn btn-toggle-audio btn-sound">Sound: Off</button>

@@ -17,6 +17,20 @@ const allButtons = document.querySelectorAll('.btn-sound');
 const playerPrompt = document.getElementById('chip-options').children[0];
 const startGameBtn = document.getElementById('btn-start-game');
 
+// Game controls
+const controlsContainer = document.getElementById('player-move-selection');
+const controlsLeftArrow = document.getElementById('left-arrow');
+const controlsRightArrow = document.getElementById('right-arrow');
+const controlsPlayerChip = document.getElementById('player-chip').children[0];
+const controlsTurnIndicator = document.getElementById('turn-indicator');
+// Game player profile panels
+const profileImagePlayer1 = document.getElementById('player-1-profile-image');
+const profileImagePlayer2 = document.getElementById('player-2-profile-image');
+
+// Player turn times
+const player1TurnTime = document.getElementById('player-1-turn-time');
+const player2TurnTime = document.getElementById('player-2-turn-time');
+
 // Audio files
 // Soundtrack
 // const soundtrack = new Audio('/DMA105-the404Collective-RainingCats/audio/soundtrack/soundtrack-1.mp3');
@@ -47,6 +61,18 @@ let gameState = {
 	player2Select: false,
 	player1Chip: null,
 	player2Chip: null,
+	player1Turn: false,
+	player2Turn: false,
+	player1TurnTime: 0,
+	player2TurnTime: 0,
+	boardState: [
+		[0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0],
+	],
 };
 
 let toggleAudio = () => {
@@ -264,4 +290,85 @@ startGameBtn.addEventListener('click', (e) => {
 	chipSelectScene.classList.add('hidden');
 	gameScene.classList.remove('hidden');
 	gameState.activeScene = 'gameScene';
+	gameState.player1Turn = true;
+	controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+	profileImagePlayer1.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+	profileImagePlayer2.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
 });
+
+// Game controls
+let controlsXPosition = 0; // Initial horizontal position
+let movementFactor = 8.25; // Amount to move
+// Listen for keydown events for game controls
+document.addEventListener('keyup', (e) => {
+	// Only allow controls if in game scene
+	if (gameState.activeScene !== 'gameScene') {
+		return;
+	}
+
+
+	switch (e.key) {
+
+
+		case 'ArrowLeft':
+			// Move player left
+			if (controlsXPosition <= 0) {
+				return; // Prevent moving left out of bounds
+			}
+
+			controlsXPosition -= movementFactor;
+			controlsContainer.style.transform = `translateX(${controlsXPosition}rem)`;
+			controlsLeftArrow.classList.add('animate-controls-arrow');
+			setTimeout(() => {
+				controlsLeftArrow.classList.add('animate-controls-arrow');
+			}, 200);
+			break;
+
+
+		case 'ArrowRight':
+			// Move player right
+			if (controlsXPosition >= (movementFactor * 6)) {
+				return; // Prevent moving right out of bounds
+			}
+
+			controlsXPosition += movementFactor;
+			controlsContainer.style.transform = `translateX(${controlsXPosition}rem)`;
+			controlsLeftArrow.classList.add('animate-controls-arrow');
+			setTimeout(() => {
+				controlsLeftArrow.classList.add('animate-controls-arrow');
+			}, 200);
+			break;
+
+
+		case ' ':
+			e.preventDefault(); // Prevents default browser action
+			if (controlsXPosition % movementFactor != 0) {
+				return;
+			}
+
+			if (gameState.player1Turn === true) {
+				gameState.player1Turn = false;
+				gameState.player2Turn = true;
+				controlsTurnIndicator.innerText = 'Player 2 Turn';
+				controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
+			} else {
+				gameState.player1Turn = true;
+				gameState.player2Turn = false;
+				controlsTurnIndicator.innerText = 'Player 1 Turn';
+				controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+			}
+
+	}
+});
+
+// Timers for player turn time
+let countPlayerTurnTime = () => {
+	if (gameState.player1Turn === true) {
+		gameState.player1TurnTime += 1;
+		player1TurnTime.innerText = gameState.player1TurnTime;
+	} else if (gameState.player2Turn === true) {
+		gameState.player2TurnTime += 1;
+		player2TurnTime.innerText = gameState.player2TurnTime;
+	}
+};
+setInterval(countPlayerTurnTime, 1000);
