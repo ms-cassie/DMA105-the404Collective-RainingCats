@@ -314,6 +314,7 @@ startGameBtn.addEventListener('click', (e) => {
 
 // Game controls
 let controlsXPosition = 0; // Initial horizontal position
+let controlsCol = 0;
 let movementFactor = 8.30; // Amount to move
 // Listen for keydown events for game controls
 document.addEventListener('keyup', (e) => {
@@ -328,11 +329,12 @@ document.addEventListener('keyup', (e) => {
 
 		case 'ArrowLeft':
 			// Move player left
-			if (controlsXPosition <= 0) {
+			if (controlsCol <= 0) {
 				return; // Prevent moving left out of bounds
 			}
 
 			controlsXPosition -= movementFactor;
+			controlsCol -= 1;
 			controlsContainer.style.transform = `translateX(${controlsXPosition}rem)`;
 			controlsLeftArrow.classList.add('animate-controls-arrow');
 			setTimeout(() => {
@@ -343,11 +345,12 @@ document.addEventListener('keyup', (e) => {
 
 		case 'ArrowRight':
 			// Move player right
-			if (controlsXPosition >= 48) {
+			if (controlsCol >= 6) {
 				return; // Prevent moving right out of bounds
 			}
 
 			controlsXPosition += movementFactor;
+			controlsCol += 1;
 			controlsContainer.style.transform = `translateX(${controlsXPosition}rem)`;
 			controlsLeftArrow.classList.add('animate-controls-arrow');
 			setTimeout(() => {
@@ -358,9 +361,6 @@ document.addEventListener('keyup', (e) => {
 
 		case ' ':
 			e.preventDefault(); // Prevents default browser action
-			if (controlsXPosition % movementFactor != 0) {
-				return;
-			}
 
 			// Finalize time for the player whose turn is ending
 			const now = Date.now();
