@@ -239,6 +239,11 @@ catChips.forEach((chip) => {
 
 
 		} else if (gameState.player2Select === true) {
+			// Ensure that player 2 does not select the same chip as player 1, or does not select an unavailable chip
+			if (chip.id === gameState.player1Chip || chip.classList.contains('unavailable')) {
+				return;
+			}
+
 			// Set game state
 			gameState.player2Chip = chip.id;
 			gameState.player1Select = false;
