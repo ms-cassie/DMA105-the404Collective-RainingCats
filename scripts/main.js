@@ -314,7 +314,7 @@ startGameBtn.addEventListener('click', (e) => {
 
 // Game controls
 let controlsXPosition = 0; // Initial horizontal position
-let movementFactor = 8.25; // Amount to move
+let movementFactor = 8.30; // Amount to move
 // Listen for keydown events for game controls
 document.addEventListener('keyup', (e) => {
 	// Only allow controls if in game scene
@@ -343,7 +343,7 @@ document.addEventListener('keyup', (e) => {
 
 		case 'ArrowRight':
 			// Move player right
-			if (controlsXPosition >= (movementFactor * 6)) {
+			if (controlsXPosition >= 48) {
 				return; // Prevent moving right out of bounds
 			}
 
