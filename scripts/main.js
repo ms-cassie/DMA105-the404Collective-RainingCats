@@ -39,6 +39,9 @@ const player2TurnTime = document.getElementById('player-2-turn-time');
 // const buttonHoverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/hover-sound_bubble-pop.mp3');
 // const buttonClickSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/button-click_select-sound.mp3');
 
+// Controls
+// const controlsMoveSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/controls-move-sound.mp3');
+
 // Game over
 // const gameOverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/game-over.mp3');
 
@@ -47,6 +50,7 @@ const soundtrack = new Audio('../audio/soundtrack/soundtrack-1.mp3');
 const buttonHoverSound = new Audio('../audio/sfx/hover-sound_bubble-pop.mp3');
 const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3');
 const gameOverSound = new Audio('../audio/sfx/game-over.mp3');
+const controlsMoveSound = new Audio('../audio/sfx/controls-move-sound.mp3');
 
 
 
@@ -77,6 +81,29 @@ let gameState = {
 		[0, 0, 0, 0, 0, 0, 0],
 	],
 };
+
+
+// Audio Configuration
+buttonHoverSound.volume = 0.25;
+buttonClickSound.volume = 0.25;
+
+allButtons.forEach((button) => {
+	// HOVER
+	button.addEventListener('mouseenter', () => {
+		if (gameState.isAudioEnabled && !button.classList.contains('btn-sound-disabled')) {
+			buttonHoverSound.currentTime = 0;
+			buttonHoverSound.play();
+		}
+	});
+
+	// CLICK
+	button.addEventListener('click', () => {
+		if (gameState.isAudioEnabled && !button.classList.contains('btn-sound-disabled')) {
+			buttonClickSound.currentTime = 0;
+			buttonClickSound.play();
+		}
+	});
+});
 
 let toggleAudio = () => {
 	// Check if audio is running
@@ -184,28 +211,6 @@ audioToggleBtns.forEach((btn) => {
 		// Start game soundtrack if audio is enabled
 		if (gameState.isAudioEnabled) {
 			startSoundtrack();
-		}
-	});
-});
-
-// Configurations
-buttonHoverSound.volume = 0.25;
-buttonClickSound.volume = 0.25;
-
-allButtons.forEach((button) => {
-	// HOVER
-	button.addEventListener('mouseenter', () => {
-		if (gameState.isAudioEnabled && !button.classList.contains('btn-sound-disabled')) {
-			buttonHoverSound.currentTime = 0;
-			buttonHoverSound.play();
-		}
-	});
-
-	// CLICK
-	button.addEventListener('click', () => {
-		if (gameState.isAudioEnabled && !button.classList.contains('btn-sound-disabled')) {
-			buttonClickSound.currentTime = 0;
-			buttonClickSound.play();
 		}
 	});
 });
@@ -337,9 +342,13 @@ document.addEventListener('keyup', (e) => {
 			controlsCol -= 1;
 			controlsContainer.style.transform = `translateX(${controlsXPosition}rem)`;
 			controlsLeftArrow.classList.add('animate-controls-arrow');
-			setTimeout(() => {
-				controlsLeftArrow.classList.add('animate-controls-arrow');
-			}, 200);
+
+			// Play audio
+			if (gameState.isAudioEnabled) {
+				controlsMoveSound.currentTime = 0;
+				controlsMoveSound.play();
+			}
+
 			break;
 
 
@@ -353,9 +362,13 @@ document.addEventListener('keyup', (e) => {
 			controlsCol += 1;
 			controlsContainer.style.transform = `translateX(${controlsXPosition}rem)`;
 			controlsLeftArrow.classList.add('animate-controls-arrow');
-			setTimeout(() => {
-				controlsLeftArrow.classList.add('animate-controls-arrow');
-			}, 200);
+
+			// Play audio
+			if (gameState.isAudioEnabled) {
+				controlsMoveSound.currentTime = 0;
+				controlsMoveSound.play();
+			}
+
 			break;
 
 
@@ -371,6 +384,12 @@ document.addEventListener('keyup', (e) => {
 			}
 			// Start timing the next player's turn
 			currentTurnStart = now;
+
+			// Play audio
+			if (gameState.isAudioEnabled) {
+				buttonClickSound.currentTime = 0;
+				buttonClickSound.play();
+			}
 
 			if (gameState.player1Turn === true) {
 				gameState.player1Turn = false;
