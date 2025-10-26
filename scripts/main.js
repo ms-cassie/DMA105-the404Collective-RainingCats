@@ -1,4 +1,7 @@
 // Get HTML Elements
+const gameVersion = '0.1.0a';
+const gameVersionHtml = document.getElementById('game-version');
+
 // Game Scenes
 const mainMenu = document.getElementById('scene-main-menu');
 const chipSelectScene = document.getElementById('scene-chip-select');
@@ -150,6 +153,9 @@ let gameState = {
 };
 
 
+// Set game version
+gameVersionHtml.innerText = `(version: ${gameVersion})`;
+
 // Audio Configuration
 buttonHoverSound.volume = 0.25;
 buttonClickSound.volume = 0.25;
@@ -190,6 +196,10 @@ let toggleAudio = () => {
 	for (let audioToggleBtn of audioToggleBtns) {
 		if (gameState.isAudioEnabled) {
 			audioToggleBtn.innerText = 'Sound: On';
+			// Play button select audio
+			buttonClickSound.currentTime = 0;
+			buttonClickSound.play();
+
 		} else {
 			audioToggleBtn.innerText = 'Sound: Off';
 		}
@@ -384,6 +394,8 @@ startGameBtn.addEventListener('click', (e) => {
 	controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
 	profileImagePlayer1.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
 	profileImagePlayer2.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
+	profileImagePlayer1.classList.add('active');
+	profileImagePlayer1.classList.add('animate-player-chip');
 });
 
 // Game controls
@@ -491,12 +503,25 @@ document.addEventListener('keyup', (e) => {
 				gameState.player2Turn = true;
 				controlsTurnIndicator.innerText = 'Player 2 Turn';
 				controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
+				// Add/Remove yellow highlight for active
+				profileImagePlayer1.classList.remove('active');
+				profileImagePlayer2.classList.add('active');
+				// Add/Remove chip animation
+				profileImagePlayer1.classList.remove('animate-player-chip');
+				profileImagePlayer2.classList.add('animate-player-chip');
+
 			} else {
 				changePlayer(gameState);
 				gameState.player1Turn = true;
 				gameState.player2Turn = false;
 				controlsTurnIndicator.innerText = 'Player 1 Turn';
 				controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+				// Add/Remove yellow highlight for active
+				profileImagePlayer1.classList.add('active');
+				profileImagePlayer2.classList.remove('active');
+				// Add/Remove chip animation
+				profileImagePlayer1.classList.add('animate-player-chip');
+				profileImagePlayer2.classList.remove('animate-player-chip');
 			}
 
 	}

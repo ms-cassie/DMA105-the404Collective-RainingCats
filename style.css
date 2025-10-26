@@ -171,7 +171,7 @@ body {
 }
 
 #scene-main-menu #menu-content {
-	background-color: #0182a7;
+	background-color: #537496;
 	border: 5px dashed whitesmoke;
 	padding: 3rem;
 	border-radius: 1rem;
@@ -209,7 +209,7 @@ body {
 }
 
 #scene-chip-select #chip-select-content {
-	background-color: #0182a7;
+	background-color: #537496;
 	border: 5px dashed whitesmoke;
 	padding: 3rem;
 	border-radius: 1rem;
@@ -373,10 +373,10 @@ body {
 
 #game-panel {
 	width: 90%;
-	height: 100%;
+	height: 98%;
 	margin: 0 auto;
 
-	background-color: #0182a7;
+	background-color: #537496;
 	border: 5px dashed whitesmoke;
 	padding: 3rem;
 	border-radius: 1rem;
@@ -423,8 +423,12 @@ body {
 	height: 100px;
 	box-shadow:0 10px 10px rgba(0, 0, 0, 0.2);
 	border-radius: 50%;
-	border: 1px solid yellow;
 	margin-bottom: 1rem;
+}
+
+#player-1-section img#player-1-profile-image.active,
+#player-2-section img#player-2-profile-image.active {
+	border: 3px solid yellow;
 }
 
 #player-1-section h3,
@@ -469,7 +473,6 @@ body {
 	background-size: cover;
 	border-radius: 50%;
 	margin: 0 auto;
-	background-color: yellow;
 
 	transform: scaleX(-1) rotate(90deg);
 }
@@ -481,7 +484,6 @@ body {
 	border-radius: 50%;
 	box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 	margin: 0 auto;
-	background-color: yellow;
 
 	transform: rotate(90deg);
 }
@@ -578,6 +580,7 @@ body {
 #player-1-special-abilities .ability-name,
 #player-2-special-abilities .ability-name {
 	margin-bottom: 0.5rem;
+	font-size: 1rem;
 }
 
 .ability.block {
@@ -598,4 +601,12 @@ body {
 	height: 100px;
 	box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
 	border-radius: 50%;
+}
+
+#player-1-special-abilities img.ability:hover,
+#player-2-special-abilities img.ability:hover {
+	border: 3px solid yellow;
+	cursor: pointer;
+
+	animation: slowGrowShrink 2s infinite;
 }
