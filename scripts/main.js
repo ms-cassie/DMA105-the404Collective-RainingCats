@@ -71,13 +71,13 @@ const findDropRow = (boardState, col) => {
 // Drop chip into board
 const dropChip = (gameState, col) => {
 	const { boardState, currentPlayer } = gameState;
-	if (!isColumnOpen(boardState, col)) return false;
+	if (!isColumnOpen(boardState, col)) return null;
 
 	const row = findDropRow(boardState, col);
-	if (row === -1) return false;
+	if (row === -1) return null;
 
 	boardState[row][col] = currentPlayer;
-	return true;
+	return row;
 };
 
 // Change player
@@ -85,7 +85,7 @@ const changePlayer = (gameState) => {
 	gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
 };
 
-// Detect a win
+// Count in a direction helper
 const countInDirection = (boardState, row, col, deltaRow, deltaCol, player) => {
 	let count = 0;
 	let r = row + deltaRow;
@@ -101,6 +101,24 @@ const countInDirection = (boardState, row, col, deltaRow, deltaCol, player) => {
 		c += deltaCol;
 	}
 	return count;
+};
+
+// Detect a win
+const checkWin = (boardState, row, col, player) => {
+	const directions = [
+		[0, 1],		// horizontal
+		[1, 0],		// vertical
+		[1, 1],		// diagonal down-right
+		[-1, 1],	// diagonal up-right
+	];
+
+	return directions.some(([dr, dc]) => {
+		const total =
+			1 +
+			countInDirection(boardState, row, col, dr, dc, player) +
+			countInDirection(boardState, row, col, -dr, -dc, player);
+		return total >= 4;
+	});
 };
 
 // Game State
@@ -214,6 +232,7 @@ howToPlayBtns.forEach((btn) => {
 					<p>The twist is that each player has access to 3 special abilities that can be used once per game to change the course of play.</p>
 					<h3>Controls:</h3>
 					<p>Use the arrow keys ← and → to move the chip to the left or right, and spacebar  to drop the chip.</p>
+					<p>To use a special ability, click the icon of the ability you wish to use for your turn.</p>
 					<h3>Special Abilities:</h3>
 					<ul>
 						<li><strong>Block:</strong> Drop a "block" chip onto the board that prevents either player from placing a chip in that spot. The block chip will rest on the first chip it hits, or the bottom of the board, and will stay the rest of the game.</li>
@@ -438,13 +457,17 @@ document.addEventListener('keyup', (e) => {
 			e.preventDefault(); // Prevents default browser action
 
 			// Game board logic here
-			if (dropChip(gameState, controlsCol)) {
+			const row = dropChip(gameState, controlsCol);
+			if (row != null) {
+				const player = gameState.currentPlayer;
 
+				if (checkWin(gameState.boardState, row, controlsCol, player)) {
+					console.log(`Player ${player} wins!`);
+				}
 			} else {
 				// Column full unable to drop chip
 				return;
 			}
-
 
 			// Finalize time for the player whose turn is ending
 			const now = Date.now();

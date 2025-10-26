@@ -414,11 +414,11 @@ body {
 #player-1-section hr,
 #player-2-section hr {
 	width: 80%;
-	margin: 1rem auto;
+	margin: 1.5rem auto;
 }
 
-#player-1-section img,
-#player-2-section img {
+#player-1-section img#player-1-profile-image,
+#player-2-section img#player-2-profile-image {
 	width: 100px;
 	height: 100px;
 	box-shadow:0 10px 10px rgba(0, 0, 0, 0.2);
@@ -430,6 +430,13 @@ body {
 #player-1-section h3,
 #player-2-section h3 {
 	font-size: 2rem;
+}
+
+#player-1-section h4,
+#player-2-section h4 {
+	margin-top: 3rem;
+	font-weight: normal;
+	font-size: 1.25rem;
 }
 
 #game-buttons {
@@ -544,4 +551,51 @@ body {
 #player-1-turn-time,
 #player-2-turn-time {
 	margin-left: 0.25rem;
+}
+
+#player-1-special-abilities,
+#player-2-special-abilities {
+	margin: 1rem auto 0 auto;
+	background-color: #33b1bd;
+	border: 3px dashed #1b5d63;
+	border-radius: 1rem;
+	width: 75%;
+	padding: 2rem;
+	
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+#player-1-special-abilities div,
+#player-2-special-abilities div {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#player-1-special-abilities .ability-name,
+#player-2-special-abilities .ability-name {
+	margin-bottom: 0.5rem;
+}
+
+.ability.block {
+	background-color: #c2b7f3;
+}
+
+.ability.scratch {
+	background-color: #d0df6a;
+}
+
+.ability.shake {
+	background-color: #f5a859;
+}
+
+#player-1-special-abilities img.ability,
+#player-2-special-abilities img.ability {
+	width: 100px;
+	height: 100px;
+	box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+	border-radius: 50%;
 }
