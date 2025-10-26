@@ -13,7 +13,7 @@ const playBtn = document.getElementById('btn-play-game');
 const howToPlayBtns = document.querySelectorAll('.btn-how-to-play');
 const audioToggleBtns = document.querySelectorAll('.btn-toggle-audio');
 
-// All buttons
+// All buttons with sounds
 const allButtons = document.querySelectorAll('.btn-sound');
 
 // Chip Select Elements
@@ -33,6 +33,9 @@ const profileImagePlayer2 = document.getElementById('player-2-profile-image');
 // Player turn times
 const player1TurnTime = document.getElementById('player-1-turn-time');
 const player2TurnTime = document.getElementById('player-2-turn-time');
+
+// Special Abilities
+const playerSpecialAbilities = document.querySelectorAll('.ability');
 
 // Audio files
 // Soundtrack
@@ -240,6 +243,8 @@ howToPlayBtns.forEach((btn) => {
 					<h2 style="text-align: center;">Rules & How to Play</h2>
 					<p>Raining cats is a game inspired by the classic Connect Four, where players aim to connect four of their cats in a row vertically, horizontally, or diagonally.</p>
 					<p>The twist is that each player has access to 3 special abilities that can be used once per game to change the course of play.</p>
+					<h3>Who Goes First??</h3>
+					<p>Both players will play 3 rounds of rock, paper, scissors. The player that wins 2 of 3 rounds will be assigned player 1, and will go first.</p>
 					<h3>Controls:</h3>
 					<p>Use the arrow keys ← and → to move the chip to the left or right, and spacebar  to drop the chip.</p>
 					<p>To use a special ability, click the icon of the ability you wish to use for your turn.</p>
@@ -383,19 +388,58 @@ startGameBtn.addEventListener('click', (e) => {
 	gameState.activeScene = 'gameScene';
 	gameState.player1Turn = true;
 	gameState.currentPlayer = 1;
-	// Reset and initialize timers for a new game
-	gameState.player1TimeMs = 0;
-	gameState.player2TimeMs = 0;
-	gameState.player1TurnTime = 0;
-	gameState.player2TurnTime = 0;
-	player1TurnTime.innerText = '0.0';
-	player2TurnTime.innerText = '0.0';
-	currentTurnStart = Date.now();
+
+	// Update player chips
 	controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
 	profileImagePlayer1.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
 	profileImagePlayer2.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
 	profileImagePlayer1.classList.add('active');
 	profileImagePlayer1.classList.add('animate-player-chip');
+
+	// Create modal to display for rules & instructions
+	const modal = document.createElement('div');
+	modal.classList.add('modal');
+	modal.innerHTML = `
+			<div class="modal-content">
+				<div id="start-game-modal" class="modal-header">
+					<h2 style="text-align: center;">Get Ready to Start!</h2>
+					<p>After the 'Start' button is clicked below, the game starts and player 1's turn begins!</p>
+					<button id="btn-start-game-modal" class="btn btn-sound">Start</button>
+				</div>
+			</div>
+		`;
+	document.body.appendChild(modal);
+
+	// Close modal when clicking on start button
+	const startButton = modal.querySelector('#btn-start-game-modal');
+
+	// Play hover sound
+	startButton.addEventListener('mouseenter', () => {
+		if (gameState.isAudioEnabled && !startButton.classList.contains('btn-sound-disabled')) {
+			buttonHoverSound.currentTime = 0;
+			buttonHoverSound.play();
+		}
+	});
+
+	// Play click sound
+	startButton.addEventListener('click', () => {
+		if (gameState.isAudioEnabled && !startButton.classList.contains('btn-sound-disabled')) {
+			buttonClickSound.currentTime = 0;
+			buttonClickSound.play();
+		}
+
+		// Remove modal
+		modal.remove();
+
+		// Reset and initialize timers for a new game
+		gameState.player1TimeMs = 0;
+		gameState.player2TimeMs = 0;
+		gameState.player1TurnTime = 0;
+		gameState.player2TurnTime = 0;
+		player1TurnTime.innerText = '0.0';
+		player2TurnTime.innerText = '0.0';
+		currentTurnStart = Date.now();
+	});
 });
 
 // Game controls
@@ -475,6 +519,7 @@ document.addEventListener('keyup', (e) => {
 
 				if (checkWin(gameState.boardState, row, controlsCol, player)) {
 					console.log(`Player ${player} wins!`);
+					clearInterval(intervalIdTurnTimer);
 				}
 			} else {
 				// Column full unable to drop chip
@@ -543,4 +588,11 @@ let countPlayerTurnTime = () => {
 		player2TurnTime.innerText = gameState.player2TurnTime;
 	}
 };
-setInterval(countPlayerTurnTime, 100);
+let intervalIdTurnTimer = setInterval(countPlayerTurnTime, 100);
+
+// Special Ability Event Listeners
+playerSpecialAbilities.forEach((ability) => {
+	ability.addEventListener('click', () => {
+		console.log(ability);
+	});
+});

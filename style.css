@@ -171,7 +171,7 @@ body {
 }
 
 #scene-main-menu #menu-content {
-	background-color: #537496;
+	background-color: rgba(83, 116, 150, 0.9);
 	border: 5px dashed whitesmoke;
 	padding: 3rem;
 	border-radius: 1rem;
@@ -209,7 +209,7 @@ body {
 }
 
 #scene-chip-select #chip-select-content {
-	background-color: #537496;
+	background-color: rgba(83, 116, 150, 0.9);
 	border: 5px dashed whitesmoke;
 	padding: 3rem;
 	border-radius: 1rem;
@@ -365,6 +365,12 @@ body {
 }
 
 /* GAME SCENE */
+#start-game-modal {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 #scene-game {
 	/* margin-top: 1rem; */
 	width: 100vw;
@@ -376,7 +382,7 @@ body {
 	height: 98%;
 	margin: 0 auto;
 
-	background-color: #537496;
+	background-color: rgba(83, 116, 150, 0.9);
 	border: 5px dashed whitesmoke;
 	padding: 3rem;
 	border-radius: 1rem;
