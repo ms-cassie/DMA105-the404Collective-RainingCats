@@ -52,7 +52,56 @@ const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3')
 const gameOverSound = new Audio('../audio/sfx/game-over.mp3');
 const controlsMoveSound = new Audio('../audio/sfx/controls-move-sound.mp3');
 
+// Functions for game logic
+// Checks for column to be open
+const isColumnOpen = (boardState, col) => {
+	return boardState[0][col] === 0;
+};
 
+// Check for lowest available cell
+const findDropRow = (boardState, col) => {
+	for (let row = boardState.length - 1; row >= 0; row--) {
+		if (boardState[row][col] === 0) {
+			return row;
+		}
+	}
+	return -1; // column is full
+};
+
+// Drop chip into board
+const dropChip = (gameState, col) => {
+	const { boardState, currentPlayer } = gameState;
+	if (!isColumnOpen(boardState, col)) return false;
+
+	const row = findDropRow(boardState, col);
+	if (row === -1) return false;
+
+	boardState[row][col] = currentPlayer;
+	return true;
+};
+
+// Change player
+const changePlayer = (gameState) => {
+	gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
+};
+
+// Detect a win
+const countInDirection = (boardState, row, col, deltaRow, deltaCol, player) => {
+	let count = 0;
+	let r = row + deltaRow;
+	let c = col + deltaCol;
+
+	while (
+		r >= 0 && r < boardState.length &&
+		c >= 0 && c < boardState[0].length &&
+		boardState[r][c] === player
+	) {
+		count++;
+		r += deltaRow;
+		c += deltaCol;
+	}
+	return count;
+};
 
 // Game State
 let gameState = {
@@ -67,7 +116,7 @@ let gameState = {
 	player2Chip: null,
 	player1Turn: false,
 	player2Turn: false,
-	// Cumulative time tracking (milliseconds)
+	currentPlayer: 0,
 	player1TimeMs: 0,
 	player2TimeMs: 0,
 	player1TurnTime: 0,
@@ -304,6 +353,7 @@ startGameBtn.addEventListener('click', (e) => {
 	gameScene.classList.remove('hidden');
 	gameState.activeScene = 'gameScene';
 	gameState.player1Turn = true;
+	gameState.currentPlayer = 1;
 	// Reset and initialize timers for a new game
 	gameState.player1TimeMs = 0;
 	gameState.player2TimeMs = 0;
@@ -336,6 +386,13 @@ document.addEventListener('keyup', (e) => {
 			// Move player left
 			if (controlsCol <= 0) {
 				return; // Prevent moving left out of bounds
+			} else if (controlsCol <= 1) {
+				controlsLeftArrow.classList.add('hide');
+			}
+
+			// Show right arrow
+			if (controlsRightArrow.classList.contains('hide')) {
+				controlsRightArrow.classList.remove('hide');
 			}
 
 			controlsXPosition -= movementFactor;
@@ -351,11 +408,17 @@ document.addEventListener('keyup', (e) => {
 
 			break;
 
-
 		case 'ArrowRight':
 			// Move player right
 			if (controlsCol >= 6) {
 				return; // Prevent moving right out of bounds
+			} else if (controlsCol >= 5) {
+				controlsRightArrow.classList.add('hide');
+			}
+
+			// Show left arrow
+			if (controlsLeftArrow.classList.contains('hide')) {
+				controlsLeftArrow.classList.remove('hide');
 			}
 
 			controlsXPosition += movementFactor;
@@ -371,9 +434,17 @@ document.addEventListener('keyup', (e) => {
 
 			break;
 
-
 		case ' ':
 			e.preventDefault(); // Prevents default browser action
+
+			// Game board logic here
+			if (dropChip(gameState, controlsCol)) {
+
+			} else {
+				// Column full unable to drop chip
+				return;
+			}
+
 
 			// Finalize time for the player whose turn is ending
 			const now = Date.now();
@@ -392,11 +463,13 @@ document.addEventListener('keyup', (e) => {
 			}
 
 			if (gameState.player1Turn === true) {
+				changePlayer(gameState);
 				gameState.player1Turn = false;
 				gameState.player2Turn = true;
 				controlsTurnIndicator.innerText = 'Player 2 Turn';
 				controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
 			} else {
+				changePlayer(gameState);
 				gameState.player1Turn = true;
 				gameState.player2Turn = false;
 				controlsTurnIndicator.innerText = 'Player 1 Turn';
