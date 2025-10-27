@@ -48,6 +48,9 @@ const playerSpecialAbilities = document.querySelectorAll('.ability');
 // Controls
 // const controlsMoveSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/controls-move-sound.mp3');
 
+// TODO:
+// Special Abilities
+
 // Game over
 // const gameOverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/game-over.mp3');
 
@@ -153,6 +156,9 @@ let gameState = {
 		[0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0],
 	],
+	availableCells: 7 * 6,
+	allowActions: false,
+	winner: '',
 };
 
 
@@ -439,6 +445,7 @@ startGameBtn.addEventListener('click', (e) => {
 		player1TurnTime.innerText = '0.0';
 		player2TurnTime.innerText = '0.0';
 		currentTurnStart = Date.now();
+		gameState.allowActions = true;
 	});
 });
 
@@ -458,6 +465,11 @@ document.addEventListener('keyup', (e) => {
 
 
 		case 'ArrowLeft':
+			// Do nothing if actions are not allowed
+			if (!gameState.allowActions) {
+				return;
+			}
+
 			// Move player left
 			if (controlsCol <= 0) {
 				return; // Prevent moving left out of bounds
@@ -484,6 +496,11 @@ document.addEventListener('keyup', (e) => {
 			break;
 
 		case 'ArrowRight':
+			// Do nothing if actions are not allowed
+			if (!gameState.allowActions) {
+				return;
+			}
+
 			// Move player right
 			if (controlsCol >= 6) {
 				return; // Prevent moving right out of bounds
@@ -512,19 +529,235 @@ document.addEventListener('keyup', (e) => {
 		case ' ':
 			e.preventDefault(); // Prevents default browser action
 
+			// Do nothing if actions are not allowed
+			if (!gameState.allowActions) {
+				return;
+			}
+
 			// Game board logic here
 			const row = dropChip(gameState, controlsCol);
 			if (row != null) {
+				// Reduce num cells available by 1
+				gameState.availableCells -= 1;
 				const player = gameState.currentPlayer;
 
 				if (checkWin(gameState.boardState, row, controlsCol, player)) {
+					// TODO:
+					// Winner - move to game over scene
 					console.log(`Player ${player} wins!`);
+					clearInterval(intervalIdTurnTimer);
+				}
+
+				// Check if there are any more cells open
+				if (gameState.availableCells === 0) {
+					// TODO:
+					// Board draw - calculate winner based on times
+					console.log('DRAW!');
 					clearInterval(intervalIdTurnTimer);
 				}
 			} else {
 				// Column full unable to drop chip
 				return;
 			}
+
+			// Drop the chip on the board
+			// Create chip element
+			const newChip = document.createElement('div');
+			const chipImage = document.createElement('img');
+
+			// Build out element
+			// Determine chip image based on player
+			if (gameState.currentPlayer === 1) {
+				chipImage.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+			} else {
+				chipImage.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
+			}
+			newChip.appendChild(chipImage);
+
+			newChip.classList.add('board-chip');
+			chipImage.classList.add('board-chip-image');
+
+			// Check column
+			switch (controlsCol) {
+				case 0:
+					newChip.classList.add('col-0');
+
+					// Check row
+					switch (row) {
+						case 5:
+							newChip.classList.add('row-5');
+							break;
+						case 4:
+							newChip.classList.add('row-4');
+							break;
+						case 3:
+							newChip.classList.add('row-3');
+							break;
+						case 2:
+							newChip.classList.add('row-2');
+							break;
+						case 1:
+							newChip.classList.add('row-1');
+							break;
+						case 0:
+							newChip.classList.add('row-0');
+							break;
+					}
+					break;
+				case 1:
+					newChip.classList.add('col-1');
+
+					// Check row
+					switch (row) {
+						case 5:
+							newChip.classList.add('row-5');
+							break;
+						case 4:
+							newChip.classList.add('row-4');
+							break;
+						case 3:
+							newChip.classList.add('row-3');
+							break;
+						case 2:
+							newChip.classList.add('row-2');
+							break;
+						case 1:
+							newChip.classList.add('row-1');
+							break;
+						case 0:
+							newChip.classList.add('row-0');
+							break;
+					}
+					break;
+				case 2:
+					newChip.classList.add('col-2');
+
+					// Check row
+					switch (row) {
+						case 5:
+							newChip.classList.add('row-5');
+							break;
+						case 4:
+							newChip.classList.add('row-4');
+							break;
+						case 3:
+							newChip.classList.add('row-3');
+							break;
+						case 2:
+							newChip.classList.add('row-2');
+							break;
+						case 1:
+							newChip.classList.add('row-1');
+							break;
+						case 0:
+							newChip.classList.add('row-0');
+							break;
+					}
+					break;
+				case 3:
+					newChip.classList.add('col-3');
+
+					// Check row
+					switch (row) {
+						case 5:
+							newChip.classList.add('row-5');
+							break;
+						case 4:
+							newChip.classList.add('row-4');
+							break;
+						case 3:
+							newChip.classList.add('row-3');
+							break;
+						case 2:
+							newChip.classList.add('row-2');
+							break;
+						case 1:
+							newChip.classList.add('row-1');
+							break;
+						case 0:
+							newChip.classList.add('row-0');
+							break;
+					}
+					break;
+				case 4:
+					newChip.classList.add('col-4');
+
+					// Check row
+					switch (row) {
+						case 5:
+							newChip.classList.add('row-5');
+							break;
+						case 4:
+							newChip.classList.add('row-4');
+							break;
+						case 3:
+							newChip.classList.add('row-3');
+							break;
+						case 2:
+							newChip.classList.add('row-2');
+							break;
+						case 1:
+							newChip.classList.add('row-1');
+							break;
+						case 0:
+							newChip.classList.add('row-0');
+							break;
+					}
+					break;
+				case 5:
+					newChip.classList.add('col-5');
+
+					// Check row
+					switch (row) {
+						case 5:
+							newChip.classList.add('row-5');
+							break;
+						case 4:
+							newChip.classList.add('row-4');
+							break;
+						case 3:
+							newChip.classList.add('row-3');
+							break;
+						case 2:
+							newChip.classList.add('row-2');
+							break;
+						case 1:
+							newChip.classList.add('row-1');
+							break;
+						case 0:
+							newChip.classList.add('row-0');
+							break;
+					}
+					break;
+				case 6:
+					newChip.classList.add('col-6');
+
+					// Check row
+					switch (row) {
+						case 5:
+							newChip.classList.add('row-5');
+							break;
+						case 4:
+							newChip.classList.add('row-4');
+							break;
+						case 3:
+							newChip.classList.add('row-3');
+							break;
+						case 2:
+							newChip.classList.add('row-2');
+							break;
+						case 1:
+							newChip.classList.add('row-1');
+							break;
+						case 0:
+							newChip.classList.add('row-0');
+							break;
+					}
+					break;
+			}
+
+			// Append to DOM
+			document.getElementById('game-board-bg-container').append(newChip);
 
 			// Finalize time for the player whose turn is ending
 			const now = Date.now();
@@ -590,9 +823,36 @@ let countPlayerTurnTime = () => {
 };
 let intervalIdTurnTimer = setInterval(countPlayerTurnTime, 100);
 
+// TODO:
 // Special Ability Event Listeners
 playerSpecialAbilities.forEach((ability) => {
 	ability.addEventListener('click', () => {
-		console.log(ability);
+		// Ability
+		// console.log(ability);
+
+		// Parent Element - has id with player info
+		// console.log(ability.parentElement);
+
+		// Spread classes from ability & get parent id
+		let abilityClassList = [...ability.classList];
+		let abilityParentId = ability.parentElement.id;
+
+		// Only allow click on correct players turn
+		if (gameState.currentPlayer === 1) {
+			if (abilityParentId.match('player-1')) {
+				console.log('Player 1 clicked player 1 ability');
+			} else {
+				// Player 1 clicked player 2 ability - do nothing
+				return;
+			}
+		} else if (gameState.currentPlayer === 2) {
+			if (abilityParentId.match('player-2')) {
+				console.log('Player 2 clicked player 2 ability');
+			} else {
+				// Player 2 clicked player 1 ability - do nothing
+				return;
+			}
+		}
+
 	});
 });

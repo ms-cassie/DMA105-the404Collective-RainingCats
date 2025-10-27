@@ -495,7 +495,6 @@ body {
 }
 
 #player-chip {
-	/* background-image: url('images/cat-chips/catchip-red-1.png'); */
 	width: 100px;
 	height: 100px;
 	background-size: cover;
@@ -616,4 +615,135 @@ body {
 	cursor: pointer;
 
 	animation: slowGrowShrink 2s infinite;
+}
+
+
+/* BOARD CHIPS */
+.board-chip {
+	position: absolute;
+	/* bottom: 7.25rem;
+	left: 3.5rem; */
+	width: 105px;
+	height: 105px;
+
+	animation: drop-chip 1s ease-in;
+}
+
+.board-chip-image {
+	width: 100%;
+	height: 100%;
+}
+
+/* COLUMNS */
+.col-0 {
+	left: 3.5rem;
+}
+
+.col-1 {
+	left: 11.75rem;
+}
+
+.col-2 {
+	left: 20.25rem;
+}
+
+.col-3 {
+	left: 28.5rem;
+}
+
+.col-4 {
+	left: 37rem;
+}
+
+.col-5 {
+	left: 45.25rem;
+}
+
+.col-6 {
+	left: 53.5rem;
+}
+
+/* ROWS & ANIMATIONS */
+.row-5 {
+	bottom: 7.25rem;
+	animation: drop-chip-row-5 750ms ease-in;
+}
+
+@keyframes drop-chip-row-5 {
+	0% {
+		bottom: 50rem;
+	}
+	100% {
+		bottom: 7.25rem;
+	}
+}
+
+.row-4 {
+	bottom: 16rem;
+	animation: drop-chip-row-4 650ms ease-in;
+}
+
+@keyframes drop-chip-row-4 {
+	0% {
+		bottom: 50rem;
+	}
+	100% {
+		bottom: 16rem;
+	}
+}
+
+.row-3 {
+	bottom: 24.5rem;
+	animation: drop-chip-row-3 500ms ease-in;
+}
+
+@keyframes drop-chip-row-3 {
+	0% {
+		bottom: 50rem;
+	}
+	100% {
+		bottom: 24.5rem;
+	}
+}
+
+.row-2 {
+	bottom: 33rem;
+	animation: drop-chip-row-2 350ms ease-in;
+}
+
+@keyframes drop-chip-row-2 {
+	0% {
+		bottom: 50rem;
+	}
+	100% {
+		bottom: 33rem;
+	}
+}
+
+.row-1 {
+	bottom: 41.5rem;
+	animation: drop-chip-row-1 250ms ease-in;
+}
+
+@keyframes drop-chip-row-1 {
+	0% {
+		bottom: 50rem;
+	}
+	100% {
+		bottom: 41.5rem;
+	}
+}
+
+.row-0 {
+	bottom: 49.75rem;
+	animation: drop-chip-row-0 100ms ease-in;
+}
+
+@keyframes drop-chip-row-0 {
+	0% {
+		bottom: 50rem;
+	}
+	100% {
+		bottom: 49.75rem;
+	}
 }
