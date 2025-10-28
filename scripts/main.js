@@ -307,7 +307,12 @@ howToPlayBtns.forEach((btn) => {
 					<p>To use a special ability, click the icon of the ability you wish to use for your turn.</p>
 					<h3>Special Abilities:</h3>
 					<ul>
-						<li><strong>Block:</strong> Drop a "block" chip onto the board that prevents either player from placing a chip in that spot. The block chip will rest on the first chip it hits, or the bottom of the board, and will stay the rest of the game.</li>
+						<li><strong>Block:</strong> Drop a "block" chip onto the board that prevents either player from placing a chip in that spot. The block chip will rest on the first chip it hits, or the bottom of the board, and will stay the rest of the game.
+						<ul>
+							<li>To use, click the block ability icon before placing your chip. To de-activate, click the ability icon again.</li>
+						</ul>
+						
+						</li>
 						<li><strong>Scratch:</strong> Removes 1 of your opponent's chips from the board.</li>
 						<li><strong>Shake:</strong> Shakes the board, removing up to 3 chips randomly chosen on the board. Shake only removes chips that do not have other chips on top of them.</li>
 					</ul>
@@ -1008,6 +1013,7 @@ playerSpecialAbilities.forEach((ability) => {
 							// Deactivate ability
 							ability.classList.remove('ability-activated');
 							controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+							gameState.blockActive = false;
 							return;
 						} else {
 							ability.classList.add('ability-activated');
@@ -1044,7 +1050,8 @@ playerSpecialAbilities.forEach((ability) => {
 						if (ability.classList.contains('ability-activated')) {
 							// Deactivate ability
 							ability.classList.remove('ability-activated');
-							controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+							controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
+							gameState.blockActive = false;
 							return;
 						} else {
 							ability.classList.add('ability-activated');
