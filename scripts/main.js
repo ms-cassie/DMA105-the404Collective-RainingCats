@@ -93,13 +93,17 @@ const findDropRow = (boardState, col) => {
 
 // Drop chip into board
 const dropChip = (gameState, col) => {
-	const { boardState, currentPlayer } = gameState;
+	const { boardState, currentPlayer, blockActive } = gameState;
 	if (!isColumnOpen(boardState, col)) return null;
 
 	const row = findDropRow(boardState, col);
 	if (row === -1) return null;
 
-	boardState[row][col] = currentPlayer;
+	if (blockActive) {
+		boardState[row][col] = 'X';
+	} else {
+		boardState[row][col] = currentPlayer;
+	}
 	return row;
 };
 
@@ -200,6 +204,7 @@ let gameState = {
 	],
 	availableCells: 7 * 6,
 	allowActions: false,
+	blockActive: false,
 	winner: '123',
 };
 
@@ -449,6 +454,11 @@ startGameBtn.addEventListener('click', (e) => {
 	profileImagePlayer1.classList.add('active');
 	profileImagePlayer1.classList.add('animate-player-chip');
 
+	// Reset controls position
+	controlsXPosition = 0; // Initial horizontal position
+	controlsCol = 0;
+	controlsContainer.style.transform = `translateX(${controlsXPosition}rem)`;
+
 	// Create modal to display for rules & instructions
 	const modal = document.createElement('div');
 	modal.classList.add('modal');
@@ -616,11 +626,28 @@ document.addEventListener('keyup', (e) => {
 			const chipImage = document.createElement('img');
 
 			// Build out element
-			// Determine chip image based on player
-			if (gameState.currentPlayer === 1) {
-				chipImage.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+			// Determine chip image based on player or ability used
+			if (gameState.blockActive === true) {
+				chipImage.src = `images/abilities/ability-block.png`;
+				chipImage.style.backgroundColor = '#c2b7f3';
+				chipImage.style.borderRadius = '50%';
+
+				// Update ability to be used
+				playerSpecialAbilities.forEach((ability) => {
+					if (ability.classList.contains('ability-activated')) {
+						ability.classList.remove('ability-activated');
+						ability.classList.add('ability-used');
+					}
+				});
+
+				// Set block to inactive
+				gameState.blockActive = false;
 			} else {
-				chipImage.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
+				if (gameState.currentPlayer === 1) {
+					chipImage.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+				} else {
+					chipImage.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
+				}
 			}
 			newChip.appendChild(chipImage);
 
@@ -849,13 +876,18 @@ document.addEventListener('keyup', (e) => {
 						gameOverScene.classList.remove('hidden');
 					}, 2000);
 
+					// Reset special abilities for both players
+					playerSpecialAbilities.forEach((ability) => {
+						ability.classList.remove('ability-used');
+					});
+
 					return;
 				}
 
 				// Check if there are any more cells open
 				if (gameState.availableCells === 0) {
 					// Board draw - calculate winner based on times
-					console.log('DRAW!');
+
 					clearInterval(intervalIdTurnTimer);
 
 					// Set game state
@@ -963,13 +995,36 @@ playerSpecialAbilities.forEach((ability) => {
 		// Only allow click on correct players turn
 		if (gameState.currentPlayer === 1) {
 			if (abilityParentId.match('player-1')) {
-				console.log('Player 1 clicked player 1 ability');
-				if (abilityClassList.includes('unavailable')) {
-					// Ability is unavailable - do nothing
-					console.log('ability is unavailable');
+				// Player 1
+				if (abilityClassList.includes('ability-used')) {
+					// Ability has already been used - do nothing
+					alert(`Ability ${abilityClassList[1]} has already been used.`);
 					return;
 				} else {
-					// Use ability here
+					// Block ability
+					if (ability.classList.contains('block')) {
+						// Activate ability
+						if (ability.classList.contains('ability-activated')) {
+							// Deactivate ability
+							ability.classList.remove('ability-activated');
+							controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+							return;
+						} else {
+							ability.classList.add('ability-activated');
+
+							// Update control chip
+							controlsPlayerChip.src = `images/abilities/ability-block.png`;
+							controlsPlayerChip.style.backgroundColor = '#c2b7f3';
+
+							// Update game state
+							gameState.blockActive = true;
+						}
+
+					}
+
+					// When user clicks scratch ability - allow a chip to be selected to scratch off the board
+
+					// When user clicks shake ability - shake the board, removing up to 2 or 3 randomly selected chips from the top slots
 				}
 			} else {
 				// Player 1 clicked player 2 ability - do nothing
@@ -977,13 +1032,32 @@ playerSpecialAbilities.forEach((ability) => {
 			}
 		} else if (gameState.currentPlayer === 2) {
 			if (abilityParentId.match('player-2')) {
-				console.log('Player 2 clicked player 2 ability');
-				if (abilityClassList.includes('unavailable')) {
-					// Ability is unavailable - do nothing
-					console.log('ability is unavailable');
+				// Player 2
+				if (abilityClassList.includes('ability-used')) {
+					// Ability has already been used - do nothing
+					alert(`Ability ${abilityClassList[1]} has already been used.`);
 					return;
 				} else {
-					// Use ability here
+					// Block ability
+					if (ability.classList.contains('block')) {
+						// Activate ability
+						if (ability.classList.contains('ability-activated')) {
+							// Deactivate ability
+							ability.classList.remove('ability-activated');
+							controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+							return;
+						} else {
+							ability.classList.add('ability-activated');
+
+							// Update control chip
+							controlsPlayerChip.src = `images/abilities/ability-block.png`;
+							controlsPlayerChip.style.backgroundColor = '#c2b7f3';
+
+							// Update game state
+							gameState.blockActive = true;
+						}
+
+					}
 				}
 			} else {
 				// Player 2 clicked player 1 ability - do nothing

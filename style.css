@@ -71,6 +71,42 @@ body {
 	cursor: not-allowed;
 }
 
+.rainbow-text {
+	animation: rainbow-glow 10s infinite;
+	color: red;
+	background-color: #333;
+	border-radius: 1rem;
+	padding: 0.25rem;
+}
+
+@keyframes rainbow-glow {
+	0% {
+		color: red;
+		background-color: #333;
+	}
+	15% {
+		color: orange;
+	}
+	30% {
+		color: yellow;
+		background-color: #333;
+	}
+	45% {
+		color: green;
+		background-color: white;
+	}
+	60% {
+		color: blue;
+	}
+	75% {
+		color: indigo;
+		background-color: whitesmoke;
+	}
+	90% {
+		color: violet;
+	}
+}
+
 /* MODAL STYLES */
 .modal {
 	position: fixed;
@@ -505,6 +541,7 @@ body {
 #player-chip img {
 	width: 100%;
 	height: 100%;
+	border-radius: 50%;
 }
 
 .animate-controls {
@@ -543,6 +580,11 @@ body {
 	animation: slowGrowShrink 2s infinite;
 }
 
+.animate-player-chip-controls {
+	transform: rotate(10deg);
+	animation: slowTilt 2s ease infinite;
+}
+
 @keyframes slowGrowShrink {
 	0% {
 		transform: scale(1);
@@ -552,6 +594,27 @@ body {
 	}
 	100% {
 		transform: scale(1);
+	}
+}
+
+@keyframes slowTilt {
+	0% {
+		transform: rotate(10deg);
+	}
+
+	25% {
+		transform: rotate(-10deg);
+	}
+
+	50% {
+		transform: rotate(10deg);
+	}
+	75% {
+		transform: rotate(-10deg);
+	}
+
+	100% {
+		transform: rotate(10deg);
 	}
 }
 
@@ -630,10 +693,25 @@ body {
 	border: none;
 }
 
-/* TODO: - implement */
 #player-1-special-abilities img.ability-used,
 #player-2-special-abilities img.ability-used {
 	filter: grayscale(1);
+	cursor: not-allowed !important;
+	border: none !important;
+	animation: none !important;
+	transform: none !important;
+}
+
+.ability-name:has(+ .ability.ability-used) {
+	text-decoration: line-through #cf285a;
+	color: #555555;
+}
+
+.ability.ability-activated {
+	transform: scale(1.2);
+	border: 3px solid yellow;
+
+	animation: slowGrowShrink 1s infinite;
 }
 
 /* BOARD CHIPS */
