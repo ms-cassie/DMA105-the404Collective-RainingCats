@@ -3,18 +3,15 @@ let intervalIdCreateCatRain;
 let intervalIdMoveCatRain;
 let intervalIdRemoveCatRain;
 let intervalIdMenuAnimation;
+let intervalIdChipSelectAnimation;
+let intervalIdGameOverAnimation;
 
-// Add check for game state, only play during main menu & player select scenes
+// Checking game state & animations
 let checkGameStateForAnimations = () => {
-	if (gameState.activeScene === 'gameScene' || gameState.activeScene === 'gameOver') {
+	if (gameState.activeScene === 'gameScene') {
 		// Stop animations if not in main menu or player select
 		clearInterval(intervalIdMenuAnimation);
-	}
-
-	if (gameState.activeScene !== 'mainMenu' && gameState.numRainingCatChips === 0) {
-		// Also clear move/remove intervals if no cat chips are left
-		clearInterval(intervalIdMoveCatRain);
-		clearInterval(intervalIdRemoveCatRain);
+		clearInterval(intervalIdChipSelectAnimation);
 	}
 };
 
@@ -82,14 +79,15 @@ const removeRainCatChips = () => {
 	});
 };
 
-// Start the background rain on the main menu
+// Start the background rain on the menus
 intervalIdCreateCatRain = setInterval(createRainCatChips, 250);
 intervalIdMoveCatRain = setInterval(moveRainCatChips, 100);
 intervalIdRemoveCatRain = setInterval(removeRainCatChips, 100);
 
-// Timers to add/remove the animate-menu class to the main menu
+// Timers to add/remove the animate-menu class to the menus
 const mainMenuContent = document.querySelector('#menu-content');
 const chipSelectContent = document.querySelector('#chip-select-content');
+const gameOverContent = document.querySelector('#game-over-content');
 
 let animateMenu = () => {
 
@@ -104,6 +102,14 @@ let animateMenu = () => {
 	} else {
 		chipSelectContent.classList.add('animate-menu');
 	}
+
+	if (gameOverContent.classList.contains('animate-menu')) {
+		gameOverContent.classList.remove('animate-menu');
+	} else {
+		gameOverContent.classList.add('animate-menu');
+	}
 };
 
 intervalIdMenuAnimation = setInterval(animateMenu, 500);
+intervalIdChipSelectAnimation = setInterval(animateMenu, 500);
+intervalIdGameOverAnimation = setInterval(animateMenu, 500);

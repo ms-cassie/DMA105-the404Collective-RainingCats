@@ -1,5 +1,5 @@
 // Get HTML Elements
-const gameVersion = '0.1.0a';
+const gameVersion = '1.0.0.poc';
 const gameVersionHtml = document.getElementById('game-version');
 
 // Game Scenes
@@ -26,6 +26,7 @@ const controlsLeftArrow = document.getElementById('left-arrow');
 const controlsRightArrow = document.getElementById('right-arrow');
 const controlsPlayerChip = document.getElementById('player-chip').children[0];
 const controlsTurnIndicator = document.getElementById('turn-indicator');
+
 // Game player profile panels
 const profileImagePlayer1 = document.getElementById('player-1-profile-image');
 const profileImagePlayer2 = document.getElementById('player-2-profile-image');
@@ -36,6 +37,19 @@ const player2TurnTime = document.getElementById('player-2-turn-time');
 
 // Special Abilities
 const playerSpecialAbilities = document.querySelectorAll('.ability');
+
+// Game Over Scene
+const winnerAnnouncement = document.getElementById('winner-announcement');
+const finalTimePlayer1 = document.getElementById('final-time-player-1');
+const finalTimePlayer2 = document.getElementById('final-time-player-2');
+
+// Play Again Button
+const playAgainBtn = document.getElementById('btn-play-again');
+
+// Initialize variables & constants
+const GLOBAL_VOLUME = 0.25;
+let intervalIdTurnTimer = 0;
+let currentTurnStart = null;
 
 // Audio files
 // Soundtrack
@@ -132,6 +146,34 @@ const checkWin = (boardState, row, col, player) => {
 
 // Game State
 let gameState = {
+	reset: () => {
+		gameState.numRainingCatChips = 0;
+		gameState.numMaxRainingCatChips = 50;
+		gameState.isGameRunning = false;
+		gameState.activeScene = 'mainMenu';
+		gameState.player1Select = false;
+		gameState.player2Select = false;
+		gameState.player1Chip = null;
+		gameState.player2Chip = null;
+		gameState.player1Turn = false;
+		gameState.player2Turn = false;
+		gameState.currentPlayer = 0;
+		gameState.player1TimeMs = 0;
+		gameState.player2TimeMs = 0;
+		gameState.player1TurnTime = 0;
+		gameState.player2TurnTime = 0;
+		gameState.boardState = [
+			[0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0],
+		];
+		gameState.availableCells = 7 * 6;
+		gameState.allowActions = false;
+		gameState.winner = '';
+	},
 	numRainingCatChips: 0,
 	numMaxRainingCatChips: 50,
 	isGameRunning: false,
@@ -158,16 +200,20 @@ let gameState = {
 	],
 	availableCells: 7 * 6,
 	allowActions: false,
-	winner: '',
+	winner: '123',
 };
 
+
+gameState.reset();
 
 // Set game version
 gameVersionHtml.innerText = `(version: ${gameVersion})`;
 
 // Audio Configuration
-buttonHoverSound.volume = 0.25;
-buttonClickSound.volume = 0.25;
+buttonHoverSound.volume = GLOBAL_VOLUME;
+buttonClickSound.volume = GLOBAL_VOLUME;
+gameOverSound.volume = GLOBAL_VOLUME;
+controlsMoveSound.volume = GLOBAL_VOLUME;
 
 allButtons.forEach((button) => {
 	// HOVER
@@ -332,6 +378,7 @@ catChips.forEach((chip) => {
 			}
 
 			// Show player 1 selection text
+			chip.parentElement.children[1].innerText = 'Player 1';
 			chip.parentElement.children[1].classList.remove('hide');
 
 
@@ -427,6 +474,10 @@ startGameBtn.addEventListener('click', (e) => {
 		}
 	});
 
+	// Reset player turn timers
+	player1TurnTime.innerText = '0.0';
+	player2TurnTime.innerText = '0.0';
+
 	// Play click sound
 	startButton.addEventListener('click', () => {
 		if (gameState.isAudioEnabled && !startButton.classList.contains('btn-sound-disabled')) {
@@ -436,6 +487,23 @@ startGameBtn.addEventListener('click', (e) => {
 
 		// Remove modal
 		modal.remove();
+
+		// Timers for player turn time (cumulative per player)
+		let countPlayerTurnTime = () => {
+			const nowTick = Date.now();
+
+			// Update only the active player's displayed time as base total + current run segment
+			if (gameState.player1Turn === true && currentTurnStart !== null) {
+				const totalMs = gameState.player1TimeMs + (nowTick - currentTurnStart);
+				gameState.player1TurnTime = (totalMs / 1000).toFixed(1);
+				player1TurnTime.innerText = gameState.player1TurnTime;
+			} else if (gameState.player2Turn === true && currentTurnStart !== null) {
+				const totalMs = gameState.player2TimeMs + (nowTick - currentTurnStart);
+				gameState.player2TurnTime = (totalMs / 1000).toFixed(1);
+				player2TurnTime.innerText = gameState.player2TurnTime;
+			}
+		};
+		intervalIdTurnTimer = setInterval(countPlayerTurnTime, 100);
 
 		// Reset and initialize timers for a new game
 		gameState.player1TimeMs = 0;
@@ -534,29 +602,11 @@ document.addEventListener('keyup', (e) => {
 				return;
 			}
 
-			// Game board logic here
+			// Get drop row
 			const row = dropChip(gameState, controlsCol);
-			if (row != null) {
-				// Reduce num cells available by 1
-				gameState.availableCells -= 1;
-				const player = gameState.currentPlayer;
-
-				if (checkWin(gameState.boardState, row, controlsCol, player)) {
-					// TODO:
-					// Winner - move to game over scene
-					console.log(`Player ${player} wins!`);
-					clearInterval(intervalIdTurnTimer);
-				}
-
-				// Check if there are any more cells open
-				if (gameState.availableCells === 0) {
-					// TODO:
-					// Board draw - calculate winner based on times
-					console.log('DRAW!');
-					clearInterval(intervalIdTurnTimer);
-				}
-			} else {
-				// Column full unable to drop chip
+			// Column is full
+			if (row === null) {
+				alert('Column is full! Unable to drop chip here.');
 				return;
 			}
 
@@ -576,6 +626,12 @@ document.addEventListener('keyup', (e) => {
 
 			newChip.classList.add('board-chip');
 			chipImage.classList.add('board-chip-image');
+
+			// Play audio
+			if (gameState.isAudioEnabled) {
+				buttonClickSound.currentTime = 0;
+				buttonClickSound.play();
+			}
 
 			// Check column
 			switch (controlsCol) {
@@ -759,6 +815,75 @@ document.addEventListener('keyup', (e) => {
 			// Append to DOM
 			document.getElementById('game-board-bg-container').append(newChip);
 
+			// Game board logic here
+			if (row != null) {
+				// Reduce num cells available by 1
+				gameState.availableCells -= 1;
+				const player = gameState.currentPlayer;
+
+				if (checkWin(gameState.boardState, row, controlsCol, player)) {
+					// Winner - move to game over scene
+
+					// Clear timer for player turns
+					clearInterval(intervalIdTurnTimer);
+					// Set game state
+					gameState.activeScene = 'gameOver';
+
+					// Set winner & change scene
+					gameState.winner = `${player}`;
+
+					// Play game over audio
+					if (gameState.isAudioEnabled) {
+						gameOverSound.currentTime = 0;
+						gameOverSound.play();
+					}
+					setTimeout(() => {
+						// Show alert
+						alert(`Player ${gameState.winner} wins!`);
+
+						// Update Game Over scene
+						winnerAnnouncement.innerText = `Player ${gameState.winner} wins!`;
+						finalTimePlayer1.innerText = `${gameState.player1TurnTime}`;
+						finalTimePlayer2.innerText = `${gameState.player2TurnTime}`;
+						gameScene.classList.add('hidden');
+						gameOverScene.classList.remove('hidden');
+					}, 2000);
+
+					return;
+				}
+
+				// Check if there are any more cells open
+				if (gameState.availableCells === 0) {
+					// Board draw - calculate winner based on times
+					console.log('DRAW!');
+					clearInterval(intervalIdTurnTimer);
+
+					// Set game state
+					gameState.activeScene = 'gameOver';
+
+					// Determine winner by time
+					if (gameState.player1TurnTime > gameState.player2TurnTime) {
+						gameState.winner = '1';
+					} else {
+						gameState.winner = '2';
+					}
+
+					// Change scene after timeout
+					setTimeout(() => {
+						// Update Game Over scene
+						winnerAnnouncement.innerText = `Player ${gameState.winner} wins!`;
+						finalTimePlayer1.innerText = `${gameState.player1TurnTime}`;
+						finalTimePlayer2.innerText = `${gameState.player2TurnTime}`;
+						gameScene.classList.add('hidden');
+						gameOverScene.classList.remove('hidden');
+					}, 2000);
+					return;
+				}
+			} else {
+				// Column full unable to drop chip
+				return;
+			}
+
 			// Finalize time for the player whose turn is ending
 			const now = Date.now();
 			if (gameState.player1Turn === true) {
@@ -768,12 +893,6 @@ document.addEventListener('keyup', (e) => {
 			}
 			// Start timing the next player's turn
 			currentTurnStart = now;
-
-			// Play audio
-			if (gameState.isAudioEnabled) {
-				buttonClickSound.currentTime = 0;
-				buttonClickSound.play();
-			}
 
 			if (gameState.player1Turn === true) {
 				changePlayer(gameState);
@@ -787,6 +906,17 @@ document.addEventListener('keyup', (e) => {
 				// Add/Remove chip animation
 				profileImagePlayer1.classList.remove('animate-player-chip');
 				profileImagePlayer2.classList.add('animate-player-chip');
+				// Make player 2 abilities available & player 1 abilities unavailable
+				playerSpecialAbilities.forEach((ability) => {
+					if (ability.parentElement.id.includes('player-2')) {
+						ability.classList.remove('btn-sound-disabled');
+						ability.classList.remove('unavailable');
+						ability.classList.add('btn-sound');
+					} else {
+						ability.classList.add('btn-sound-disabled');
+						ability.classList.add('unavailable');
+					}
+				});
 
 			} else {
 				changePlayer(gameState);
@@ -800,28 +930,21 @@ document.addEventListener('keyup', (e) => {
 				// Add/Remove chip animation
 				profileImagePlayer1.classList.add('animate-player-chip');
 				profileImagePlayer2.classList.remove('animate-player-chip');
+				// Make player 2 abilities available & player 1 abilities unavailable
+				playerSpecialAbilities.forEach((ability) => {
+					if (ability.parentElement.id.includes('player-1')) {
+						ability.classList.remove('btn-sound-disabled');
+						ability.classList.remove('unavailable');
+						ability.classList.add('btn-sound');
+					} else {
+						ability.classList.add('btn-sound-disabled');
+						ability.classList.add('unavailable');
+					}
+				});
 			}
 
 	}
 });
-
-// Timers for player turn time (cumulative per player)
-let currentTurnStart = null;
-let countPlayerTurnTime = () => {
-	const nowTick = Date.now();
-
-	// Update only the active player's displayed time as base total + current run segment
-	if (gameState.player1Turn === true && currentTurnStart !== null) {
-		const totalMs = gameState.player1TimeMs + (nowTick - currentTurnStart);
-		gameState.player1TurnTime = (totalMs / 1000).toFixed(1);
-		player1TurnTime.innerText = gameState.player1TurnTime;
-	} else if (gameState.player2Turn === true && currentTurnStart !== null) {
-		const totalMs = gameState.player2TimeMs + (nowTick - currentTurnStart);
-		gameState.player2TurnTime = (totalMs / 1000).toFixed(1);
-		player2TurnTime.innerText = gameState.player2TurnTime;
-	}
-};
-let intervalIdTurnTimer = setInterval(countPlayerTurnTime, 100);
 
 // TODO:
 // Special Ability Event Listeners
@@ -841,6 +964,13 @@ playerSpecialAbilities.forEach((ability) => {
 		if (gameState.currentPlayer === 1) {
 			if (abilityParentId.match('player-1')) {
 				console.log('Player 1 clicked player 1 ability');
+				if (abilityClassList.includes('unavailable')) {
+					// Ability is unavailable - do nothing
+					console.log('ability is unavailable');
+					return;
+				} else {
+					// Use ability here
+				}
 			} else {
 				// Player 1 clicked player 2 ability - do nothing
 				return;
@@ -848,6 +978,13 @@ playerSpecialAbilities.forEach((ability) => {
 		} else if (gameState.currentPlayer === 2) {
 			if (abilityParentId.match('player-2')) {
 				console.log('Player 2 clicked player 2 ability');
+				if (abilityClassList.includes('unavailable')) {
+					// Ability is unavailable - do nothing
+					console.log('ability is unavailable');
+					return;
+				} else {
+					// Use ability here
+				}
 			} else {
 				// Player 2 clicked player 1 ability - do nothing
 				return;
@@ -855,4 +992,53 @@ playerSpecialAbilities.forEach((ability) => {
 		}
 
 	});
+});
+
+// Play Again button event listener (refreshes the browser)
+playAgainBtn.addEventListener(('click'), () => {
+	// Reset game state
+	gameState.reset();
+
+	// Set game state to chipSelect
+	gameState.ActiveScene = 'chipSelectScene';
+
+	// Set player 1 select to true
+	gameState.player1Select = true;
+
+	// Reset chip select scene
+	playerPrompt.innerText = "Player 1 - Select Your Cat Chip!";
+	// Add disabled styles to Start button
+	startGameBtn.classList.add('btn-sound-disabled');
+	startGameBtn.classList.add('btn-disabled');
+
+	// Reset cat chips
+	catChips.forEach((chip) => {
+		// Update selection menu
+		// Remove gray filter and disable button
+		const parentSiblings = chip.parentNode.parentNode.children;
+		for (let sibling of parentSiblings) {
+			for (let child of sibling.children) {
+				if (child !== chip) {
+					child.classList.remove('unavailable');
+				} else {
+					child.classList.remove('selected');
+				}
+				child.classList.remove('btn-sound-disabled');
+			}
+		}
+
+		// Hide player 1 selection text
+		chip.parentElement.children[1].classList.add('hide');
+
+	});
+
+	// Reset game scene
+	const clearBoardChipsEl = document.querySelectorAll('.board-chip');
+	clearBoardChipsEl.forEach((chip) => {
+		chip.remove();
+	});
+
+	// Change game scene
+	gameOverScene.classList.add('hidden');
+	chipSelectScene.classList.remove('hidden');
 });
