@@ -164,6 +164,13 @@ const useScratchAbility = ev => {
 	ev.srcElement.remove();
 
 	// Remove item from board state
+
+	// Set game state
+	gameState.scratchActive = false;
+
+	// Remove ability active & add ability used class to board chip
+	// need to figure out how to get which player used ability & add/remove classes from their special abilty NOT the board chip
+
 };
 
 const hoverScratchAbility = ev => {
@@ -1081,7 +1088,6 @@ playerSpecialAbilities.forEach((ability) => {
 
 							// Remove event listeners
 							const boardChips = document.querySelectorAll('.board-chip');
-							console.log(boardChips);
 							boardChips.forEach((chip) => {
 								chip.removeEventListener('mouseenter', hoverScratchAbility);
 								chip.removeEventListener('click', useScratchAbility);
@@ -1090,12 +1096,20 @@ playerSpecialAbilities.forEach((ability) => {
 
 							return;
 						} else {
+							// Get chips on board
+							const boardChips = document.querySelectorAll('.board-chip');
+							console.log(boardChips);
+
+							// No chips on board, return
+							if (boardChips.length <= 0) {
+								alert('There are no chips on the board to scratch!');
+								return;
+							}
+
+							// Add event listener and active class
 							ability.classList.add('ability-activated');
 							gameState.scratchActive = true;
 
-							// Add event listener for board chips
-							const boardChips = document.querySelectorAll('.board-chip');
-							console.log(boardChips);
 							// FIXME:
 							boardChips.forEach((chip) => {
 								chip.addEventListener('mouseenter', hoverScratchAbility);
