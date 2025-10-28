@@ -148,6 +148,40 @@ const checkWin = (boardState, row, col, player) => {
 	});
 };
 
+// FIXME:
+// Functions for special abilities
+const useScratchAbility = ev => {
+	// Ensure game state says scratch ability is active
+	const { scratchActive } = gameState;
+	if (!scratchActive) return;
+
+	// Get clicked element
+	console.log(ev.srcElement);
+	console.log(ev.srcElement.parentElement);
+	console.log(ev.srcElement.parentElement);
+
+	// Remove element from board
+	ev.srcElement.remove();
+
+	// Remove item from board state
+};
+
+const hoverScratchAbility = ev => {
+	// Ensure game state says scratch ability is active
+	const { scratchActive } = gameState;
+	if (!scratchActive) return;
+
+	ev.srcElement.classList.add('scratch-hover');
+};
+
+const noHoverScrachAbility = ev => {
+	// Ensure game state says scratch ability is active
+	const { scratchActive } = gameState;
+	if (!scratchActive) return;
+
+	ev.srcElement.classList.remove('scratch-hover');
+};
+
 // Game State
 let gameState = {
 	reset: () => {
@@ -205,7 +239,8 @@ let gameState = {
 	availableCells: 7 * 6,
 	allowActions: false,
 	blockActive: false,
-	winner: '123',
+	scratchActive: false,
+	winner: '',
 };
 
 
@@ -847,6 +882,14 @@ document.addEventListener('keyup', (e) => {
 			// Append to DOM
 			document.getElementById('game-board-bg-container').append(newChip);
 
+			// Reset special ability states
+			gameState.scratchActive = false;
+
+			// Reset special abilities for both players
+			playerSpecialAbilities.forEach((ability) => {
+				ability.classList.remove('ability-activated');
+			});
+
 			// Game board logic here
 			if (row != null) {
 				// Reduce num cells available by 1
@@ -1026,11 +1069,44 @@ playerSpecialAbilities.forEach((ability) => {
 							gameState.blockActive = true;
 						}
 
+					} else if (ability.classList.contains('scratch')) {
+						// Scratch ability
+						// When user clicks scratch ability - allow a chip to be selected to scratch off the board
+
+						// Activate ability
+						if (ability.classList.contains('ability-activated')) {
+							// Deactivate ability
+							ability.classList.remove('ability-activated');
+							gameState.scratchActive = false;
+
+							// Remove event listeners
+							const boardChips = document.querySelectorAll('.board-chip');
+							console.log(boardChips);
+							boardChips.forEach((chip) => {
+								chip.removeEventListener('mouseenter', hoverScratchAbility);
+								chip.removeEventListener('click', useScratchAbility);
+								chip.removeEventListener('mouseleave', noHoverScrachAbility);
+							});
+
+							return;
+						} else {
+							ability.classList.add('ability-activated');
+							gameState.scratchActive = true;
+
+							// Add event listener for board chips
+							const boardChips = document.querySelectorAll('.board-chip');
+							console.log(boardChips);
+							// FIXME:
+							boardChips.forEach((chip) => {
+								chip.addEventListener('mouseenter', hoverScratchAbility);
+								chip.addEventListener('click', useScratchAbility);
+								chip.addEventListener('mouseleave', noHoverScrachAbility);
+							});
+						}
+					} else if (ability.classList.contains('shake')) {
+						// Shake ability
+						// When user clicks shake ability - shake the board, removing up to 2 or 3 randomly selected chips from the top slots
 					}
-
-					// When user clicks scratch ability - allow a chip to be selected to scratch off the board
-
-					// When user clicks shake ability - shake the board, removing up to 2 or 3 randomly selected chips from the top slots
 				}
 			} else {
 				// Player 1 clicked player 2 ability - do nothing

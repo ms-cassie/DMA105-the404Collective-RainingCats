@@ -714,6 +714,31 @@ body {
 	animation: slowGrowShrink 1s infinite;
 }
 
+/* FIXME: */
+.board-chip.scratch-hover {
+	outline: 3px solid yellow;
+	border-radius: 50%;
+}
+
+.board-chip.scratch-hover > img {
+	opacity: 50%;
+}
+
+.board-chip.scratch-hover::after {
+	content: "";
+	width: 125px;
+	height: 125px;
+	position: absolute;
+	top: -1rem;
+	left: -0.75rem;
+	background-image: url("images/abilities/ability-scratch-mark.png");
+	background-size: cover;
+	border-radius: 50%;
+	cursor: pointer;
+
+	animation: slowGrowShrink 1s infinite;
+}
+
 /* BOARD CHIPS */
 .board-chip {
 	position: absolute;
