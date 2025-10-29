@@ -160,15 +160,24 @@ const useScratchAbility = ev => {
 	console.log(ev.srcElement.parentElement);
 	console.log(ev.srcElement.parentElement);
 
-	// Remove element from board
-	ev.srcElement.remove();
+	// Animate chip & remove element from board
+	ev.srcElement.children[0].classList.add('animate-chip-scratch');
+	setTimeout(() => {
+		ev.srcElement.remove();
+	}, 1000);
 
 	// Remove item from board state
 
 	// Set game state
 	gameState.scratchActive = false;
 
+	// Determine which player used the ability
 	// Remove ability active & add ability used class to board chip
+	if (gameState.currentPlayer === 1) {
+
+	} else {
+
+	}
 	// need to figure out how to get which player used ability & add/remove classes from their special abilty NOT the board chip
 
 };
@@ -590,6 +599,8 @@ document.addEventListener('keyup', (e) => {
 
 
 		case 'ArrowLeft':
+			e.preventDefault(); // Prevents default browser action
+
 			// Do nothing if actions are not allowed
 			if (!gameState.allowActions) {
 				return;
@@ -621,6 +632,8 @@ document.addEventListener('keyup', (e) => {
 			break;
 
 		case 'ArrowRight':
+			e.preventDefault(); // Prevents default browser action
+
 			// Do nothing if actions are not allowed
 			if (!gameState.allowActions) {
 				return;
@@ -660,6 +673,7 @@ document.addEventListener('keyup', (e) => {
 			}
 
 			// Get drop row
+			// FIXME: this is where i get the row
 			const row = dropChip(gameState, controlsCol);
 			// Column is full
 			if (row === null) {

@@ -739,6 +739,20 @@ body {
 	animation: slowGrowShrink 1s infinite;
 }
 
+.animate-chip-scratch {
+	animation: goAway 1s ease-in-out;
+}
+
+@keyframes goAway {
+	0% {
+		opacity: 100%;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
 /* BOARD CHIPS */
 .board-chip {
 	position: absolute;
@@ -784,7 +798,7 @@ body {
 
 /* ROWS & ANIMATIONS */
 .row-5 {
-	bottom: 7.25rem;
+	bottom: 12%;
 	animation: drop-chip-row-5 750ms ease-in;
 }
 
@@ -798,7 +812,7 @@ body {
 }
 
 .row-4 {
-	bottom: 16rem;
+	bottom: 26.2%;
 	animation: drop-chip-row-4 650ms ease-in;
 }
 
