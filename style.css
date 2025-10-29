@@ -107,6 +107,10 @@ body {
 	}
 }
 
+.not-allowed {
+	cursor: not-allowed;
+}
+
 /* MODAL STYLES */
 .modal {
 	position: fixed;
@@ -490,6 +494,7 @@ body {
 	gap: 1.5rem;
 }
 
+
 /* GAME BOARD (grid) - 7 col 6 row */
 #game-board-bg-container {
 	position: relative;
@@ -714,7 +719,7 @@ body {
 	animation: slowGrowShrink 1s infinite;
 }
 
-/* FIXME: */
+
 .board-chip.scratch-hover {
 	outline: 3px solid yellow;
 	border-radius: 50%;
