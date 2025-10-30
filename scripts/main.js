@@ -53,32 +53,32 @@ let currentTurnStart = null;
 
 // Audio files
 // Soundtrack
-// const soundtrack = new Audio('/DMA105-the404Collective-RainingCats/audio/soundtrack/soundtrack-1.mp3');
+const soundtrack = new Audio('/DMA105-the404Collective-RainingCats/audio/soundtrack/soundtrack-1.mp3');
 
 // Buttons
-// const buttonHoverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/hover-sound_bubble-pop.mp3');
-// const buttonClickSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/button-click_select-sound.mp3');
+const buttonHoverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/hover-sound_bubble-pop.mp3');
+const buttonClickSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/button-click_select-sound.mp3');
 
 // Controls
-// const controlsMoveSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/controls-move-sound.mp3');
+const controlsMoveSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/controls-move-sound.mp3');
 
 // Special Abilities
-// const abilitySoundBlock = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-block-sound.mp3');
-// const abilitySoundScratch = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-scratch-sound.mp3');
-// const abilitySoundShake = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-shake-sound.mp3');
+const abilitySoundBlock = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-block-sound.mp3');
+const abilitySoundScratch = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-scratch-sound.mp3');
+const abilitySoundShake = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-shake-sound.mp3');
 
 // Game over
-// const gameOverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/game-over.mp3');
+const gameOverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/game-over.mp3');
 
 // Sounds for local development & testing
-const soundtrack = new Audio('../audio/soundtrack/soundtrack-1.mp3');
-const buttonHoverSound = new Audio('../audio/sfx/hover-sound_bubble-pop.mp3');
-const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3');
-const gameOverSound = new Audio('../audio/sfx/game-over.mp3');
-const controlsMoveSound = new Audio('../audio/sfx/controls-move-sound.mp3');
-const abilitySoundBlock = new Audio('../audio/sfx/abilities/ability-block-sound.mp3');
-const abilitySoundScratch = new Audio('../audio/sfx/abilities/ability-scratch-sound.mp3');
-const abilitySoundShake = new Audio('../audio/sfx/abilities/ability-shake-sound.mp3');
+// const soundtrack = new Audio('../audio/soundtrack/soundtrack-1.mp3');
+// const buttonHoverSound = new Audio('../audio/sfx/hover-sound_bubble-pop.mp3');
+// const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3');
+// const gameOverSound = new Audio('../audio/sfx/game-over.mp3');
+// const controlsMoveSound = new Audio('../audio/sfx/controls-move-sound.mp3');
+// const abilitySoundBlock = new Audio('../audio/sfx/abilities/ability-block-sound.mp3');
+// const abilitySoundScratch = new Audio('../audio/sfx/abilities/ability-scratch-sound.mp3');
+// const abilitySoundShake = new Audio('../audio/sfx/abilities/ability-shake-sound.mp3');
 
 // Functions for game logic
 // Checks for column to be open
@@ -179,23 +179,27 @@ const useScratchAbility = ev => {
 		return;
 	}
 
-	// Check if the chip has another chip above it
-	const belowChipClickedLocationRow = Number(chipClickedLocation[1]) + 1;
-	const aboveChipClickedLocationRow = Number(chipClickedLocation[1]) - 1;
+	// For top row chip allow scratch - no need to check above
+	if (Number(chipClickedLocation[1]) !== 0) {
+		// Check if the chip has another chip above it
+		const belowChipClickedLocationRow = Number(chipClickedLocation[1]) + 1;
+		const aboveChipClickedLocationRow = Number(chipClickedLocation[1]) - 1;
 
-	// Bottom row
-	if (belowChipClickedLocationRow > 5) {
-		if (gameState.boardState[aboveChipClickedLocationRow][chipClickedLocation[0]] !== 0) {
-			alert('You can only use scratch on chips with no other chips above them!');
-			return;
-		}
-	} else {
-		// not bottom row
-		if (gameState.boardState[aboveChipClickedLocationRow][chipClickedLocation[0]] !== 0) {
-			alert('You can only use scratch on chips with no other chips above them!');
-			return;
+		// Bottom row
+		if (belowChipClickedLocationRow > 5) {
+			if (gameState.boardState[aboveChipClickedLocationRow][chipClickedLocation[0]] !== 0) {
+				alert('You can only use scratch on chips with no other chips above them!');
+				return;
+			}
+		} else {
+			// not bottom row
+			if (gameState.boardState[aboveChipClickedLocationRow][chipClickedLocation[0]] !== 0) {
+				alert('You can only use scratch on chips with no other chips above them!');
+				return;
+			}
 		}
 	}
+
 
 	// Animate chip & remove element from board
 	ev.srcElement.children[0].classList.add('animate-chip-scratch');
@@ -300,23 +304,26 @@ const hoverScratchAbility = ev => {
 	const { scratchActive } = gameState;
 	if (!scratchActive) return;
 
-	// Check if the chip has another chip above it
-	const belowChipHoverLocationRow = Number(chipHoverLocation[1]) + 1;
-	const aboveChipHoverLocationRow = Number(chipHoverLocation[1]) - 1;
+	if (Number(chipHoverLocation[1]) !== 0) {
+		// Check if the chip has another chip above it
+		const belowChipHoverLocationRow = Number(chipHoverLocation[1]) + 1;
+		const aboveChipHoverLocationRow = Number(chipHoverLocation[1]) - 1;
 
-	// Bottom row
-	if (belowChipHoverLocationRow > 5) {
-		if (gameState.boardState[aboveChipHoverLocationRow][chipHoverLocation[0]] !== 0) {
-			ev.srcElement.classList.add('not-allowed');
-			return;
-		}
-	} else {
-		// not bottom row
-		if (gameState.boardState[aboveChipHoverLocationRow][chipHoverLocation[0]] !== 0) {
-			ev.srcElement.classList.add('not-allowed');
-			return;
+		// Bottom row
+		if (belowChipHoverLocationRow > 5) {
+			if (gameState.boardState[aboveChipHoverLocationRow][chipHoverLocation[0]] !== 0) {
+				ev.srcElement.classList.add('not-allowed');
+				return;
+			}
+		} else {
+			// not bottom row
+			if (gameState.boardState[aboveChipHoverLocationRow][chipHoverLocation[0]] !== 0) {
+				ev.srcElement.classList.add('not-allowed');
+				return;
+			}
 		}
 	}
+
 
 	// Prevent the scratch from being used on block chip
 	if (chipHoverClasses.includes('block')) {
