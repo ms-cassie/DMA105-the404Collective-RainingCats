@@ -970,6 +970,9 @@ body {
 /* Large tablets / small laptops */
 @media (max-width: 1200px) {
 	html { font-size: 14px; }
+	body {
+		background-color: black;
+	}
 	#game-panel { padding: 2rem; }
 	.chip-options-grid { flex-wrap: wrap; justify-content: center; }
 	#chip-options .cat-chip { width: 90px; height: 90px; }
@@ -978,7 +981,9 @@ body {
 /* Tablets */
 @media (max-width: 992px) {
 	html { font-size: 12px; }
-	#scene-main-menu { margin-top: 4rem; }
+	#scene-main-menu { margin-top: 2rem; }
+	#scene-chip-select { margin-top: 1rem; }
+	#scene-game-over { margin-top: 2rem; }
 	#scene-main-menu #menu-content,
 	#scene-chip-select #chip-select-content,
 	#scene-game-over #game-over-content { width: 92vw; max-width: 92vw; padding: 2rem; }
@@ -987,13 +992,24 @@ body {
 	#player-1-section, #player-2-section { width: 100%; }
 	#game-board-bg { width: 48rem; }
 	.chip-options-grid { gap: 1.25rem; }
+
+	/* Scale board chips and align rows by percentage so they fit smaller board heights */
+	.board-chip { width: 95px; height: 95px; }
+	.row-5 { bottom: 12%; animation: drop-chip-row-5 750ms ease-in; }
+	.row-4 { bottom: 26%; animation: drop-chip-row-4 650ms ease-in; }
+	.row-3 { bottom: 40%; animation: drop-chip-row-3 500ms ease-in; }
+	.row-2 { bottom: 54%; animation: drop-chip-row-2 350ms ease-in; }
+	.row-1 { bottom: 68%; animation: drop-chip-row-1 250ms ease-in; }
+	.row-0 { bottom: 82%; animation: drop-chip-row-0 100ms ease-in; }
 }
 
 /* Phones */
 @media (max-width: 768px) {
 	html { font-size: 10px; }
 	body { overflow: auto; }
-	#scene-main-menu { margin-top: 2rem; }
+	#scene-main-menu { margin-top: 1rem; }
+	#scene-chip-select { margin-top: 0.5rem; }
+	#scene-game-over { margin-top: 1rem; }
 	#scene-main-menu #menu-content,
 	#scene-chip-select #chip-select-content,
 	#scene-game-over #game-over-content { width: 92vw; max-width: 92vw; padding: 1.5rem; }
@@ -1007,6 +1023,14 @@ body {
 	#left-arrow img, #right-arrow img { width: 40px; height: 40px; }
 	#player-chip { width: 80px; height: 80px; }
 	#game-board-bg { width: 42rem; }
+
+	.board-chip { width: 90px; height: 90px; }
+	.row-5 { bottom: 12%; animation: drop-chip-row-5 750ms ease-in; }
+	.row-4 { bottom: 26%; animation: drop-chip-row-4 650ms ease-in; }
+	.row-3 { bottom: 40%; animation: drop-chip-row-3 500ms ease-in; }
+	.row-2 { bottom: 54%; animation: drop-chip-row-2 350ms ease-in; }
+	.row-1 { bottom: 68%; animation: drop-chip-row-1 250ms ease-in; }
+	.row-0 { bottom: 82%; animation: drop-chip-row-0 100ms ease-in; }
 }
 
 /* Small phones */
@@ -1017,4 +1041,12 @@ body {
 	#player-1-special-abilities img.ability,
 	#player-2-special-abilities img.ability { width: 80px; height: 80px; }
 	#game-board-bg { width: 36rem; }
+
+	.board-chip { width: 78px; height: 78px; }
+	.row-5 { bottom: 12%; }
+	.row-4 { bottom: 26%; }
+	.row-3 { bottom: 40%; }
+	.row-2 { bottom: 54%; }
+	.row-1 { bottom: 68%; }
+	.row-0 { bottom: 82%; }
 }
