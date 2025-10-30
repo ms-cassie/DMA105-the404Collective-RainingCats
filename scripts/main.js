@@ -758,6 +758,12 @@ startGameBtn.addEventListener('click', (e) => {
 let controlsXPosition = 0; // Initial horizontal position
 let controlsCol = 0;
 let movementFactor = 8.30; // Amount to move
+const screenWidth = window.screen.width;
+const screenHeight = window.screen.height;
+if (screenWidth < 1550) {
+	movementFactor = 4.5;
+}
+
 // Listen for keydown events for game controls
 document.addEventListener('keyup', (e) => {
 	// Only allow controls if in game scene

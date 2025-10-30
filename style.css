@@ -968,6 +968,340 @@ body {
 
 /* --- Responsive adjustments --- */
 /* Large tablets / small laptops */
+@media (max-width: 2049px) {
+	#scene-main-menu {
+		margin-top: 10px;
+	}
+
+	#menu-content {
+		font-size: 1rem;
+	}
+
+	#menu-content img {
+		width: 200px;
+	}
+
+	#menu-content small {
+		font-size: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	#menu-content h1 {
+		font-size: 1.5rem;
+	}
+
+	#menu-buttons {
+		align-items: center;
+	}
+
+	.btn {
+		width: 150px;
+		
+	}
+
+	#scene-chip-select {
+		margin-top: 10px;
+	}
+
+	#scene-chip-select h2 {
+		font-size: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	#scene-chip-select hr {
+		margin: 0 auto !important;
+	}
+
+	#scene-chip-select h3 {
+		font-size: 0.9rem;
+	}
+
+	#scene-chip-select small {
+		font-size: 0.5rem;
+	}
+
+	#chip-select-content {
+		width: 50vw;
+	}
+
+	#scene-chip-select #chip-select-content {
+		padding: 1rem;
+	}
+
+	#chip-select-content #red-team,
+	#chip-select-content #blue-team {
+		max-width: 90%;
+		max-height: 175px;
+		padding: 0.25rem;
+	}
+	
+	#chip-select-content p {
+		font-size: 0.7rem;
+		margin-bottom: 0.5rem;
+	}
+
+	#chip-select-content hr {
+		width: 75%;
+		
+	}
+	
+	#chip-red-options,
+	#chip-blue-options {
+		gap: 1rem;
+		margin-top: 0.5rem;
+	};
+
+	.button-div {
+		display: flex;
+		flex-direction: column;
+		/* align-items: center; */
+		/* justify-content: center; */
+	}
+
+	#chip-options {
+		margin-top: 1rem;
+	}
+
+	#chip-options button {
+		width: 100px;
+		height: 50px;
+		font-size: 0.75rem;
+	}
+
+	#chip-options .cat-chip {
+		width: 65px;
+		height: 65px;
+	}
+
+	#scene-game {
+		margin-top: 10px;
+	}
+
+	#game-board-bg-container {
+		margin-top: 0.5rem;
+	}
+
+	#game-panel {
+		padding: 1rem;
+		
+	}
+
+	#game-panel-players-board {
+		gap: 0;
+	}
+
+	#game-panel h2 {
+		font-size: 1rem;
+		opacity: 0;
+	}
+
+	#game-board-bg-container img {
+		max-width: 700px;
+		max-height: 500px;
+	}
+
+	#player-1-section h3,
+	#player-2-section h3 {
+		font-size: 1rem;
+	}
+
+	#player-1-section h4,
+	#player-2-section h4 {
+		font-size: 0.8rem;
+		margin-top: 1rem;
+	}
+
+	#player-1-section p,
+	#player-2-section p {
+		font-size: 0.75rem;
+	}
+
+	#player-1-section hr,
+	#player-2-section hr {
+		margin: 0.5rem;
+	}
+
+	#player-1-section img,
+	#player-2-section img,
+	.board-chip {
+		max-width: 60px;
+		max-height: 60px;
+	}
+
+	#player-1-special-abilities,
+	#player-2-special-abilities {
+		margin: 0 auto;
+		padding: 0.5rem;
+		gap: 1rem;
+		max-width: 150px;
+	}
+
+	#player-1-special-abilities img,
+	#player-2-special-abilities img {
+		max-width: 50px;
+		max-height: 50px;
+	}
+
+	#game-buttons button {
+		font-size: 0.75rem;
+		max-width: 100px;
+	}
+	
+	#player-chip img {
+		width: 100%;
+		height: 100%;
+	}
+
+	#player-chip div {
+		margin: 0 auto;
+	}
+
+	#player-chip {
+		width: 65px;
+		height: 65px;
+		transform: translateX(-1rem) !important;
+	}
+	
+	#right-arrow img,
+	#left-arrow img {
+		max-width: 35px;
+		max-height: 35px;
+	}
+
+	#player-move-selection {
+		gap: 0.5rem;
+		width: 150px;
+		top: -2.5rem;
+		left: 0;
+	}
+	
+
+	/* COLUMNS */
+	.col-0 {
+		left: 1.75rem;
+	}
+
+	.col-1 {
+		left: 6.25rem;
+	}
+
+	.col-2 {
+		left: 10.75rem;
+	}
+
+	.col-3 {
+		left: 15.25rem;
+	}
+
+	.col-4 {
+		left: 20rem;
+	}
+
+	.col-5 {
+		left: 24.3rem;
+	}
+
+	.col-6 {
+		left: 29rem;
+	}
+
+	/* ROWS & ANIMATIONS */
+	.row-5 {
+		bottom: 8rem;
+		animation: drop-chip-row-5 750ms ease-in;
+	}
+
+	@keyframes drop-chip-row-5 {
+		0% {
+			bottom: 35rem;
+		}
+		100% {
+			bottom: 8rem;
+		}
+	}
+
+	.row-4 {
+		bottom: 12.75rem;
+		animation: drop-chip-row-4 650ms ease-in;
+	}
+
+	@keyframes drop-chip-row-4 {
+		0% {
+			bottom: 35rem;
+		}
+		100% {
+			bottom: 12.75rem;
+		}
+	}
+
+	.row-3 {
+		bottom: 17.5rem;
+		animation: drop-chip-row-3 500ms ease-in;
+	}
+
+	@keyframes drop-chip-row-3 {
+		0% {
+			bottom: 35rem;
+		}
+		100% {
+			bottom: 17.5rem;
+		}
+	}
+
+	.row-2 {
+		bottom: 22rem;
+		animation: drop-chip-row-2 350ms ease-in;
+	}
+
+	@keyframes drop-chip-row-2 {
+		0% {
+			bottom: 35rem;
+		}
+		100% {
+			bottom: 22rem;
+		}
+	}
+
+	.row-1 {
+		bottom: 26.5rem;
+		animation: drop-chip-row-1 250ms ease-in;
+	}
+
+	@keyframes drop-chip-row-1 {
+		0% {
+			bottom: 35rem;
+		}
+		100% {
+			bottom: 26.5rem;
+		}
+	}
+
+	.row-0 {
+		bottom: 31rem;
+		animation: drop-chip-row-0 100ms ease-in;
+	}
+
+	@keyframes drop-chip-row-0 {
+		0% {
+			bottom: 35rem;
+		}
+		100% {
+			bottom: 31rem;
+		}
+	}
+	.modal-content {
+		max-height: 95vh !important;
+	}
+	.modal-header p,
+	.modal-header h2, 
+	.modal-header h3, 
+	.modal-header li {
+		font-size: 0.75rem !important;
+		margin-bottom: 0.5rem;
+	}
+
+	
+}
 @media (max-width: 1200px) {
 	html { font-size: 14px; }
 	body {
