@@ -16,10 +16,6 @@ body {
 	overflow: hidden;
 	line-height: 1.5;
 }
-html {
-	/* Using rem-based sizing lets us scale the whole board/layout on small screens */
-	font-size: 16px;
-}
 
 /* Utility classes */
 .hidden {
@@ -503,14 +499,6 @@ html {
 #game-board-bg-container {
 	position: relative;
 	margin-top: 4rem;
-}
-
-/* Constrain board image so it can scale with rem + media queries */
-#game-board-bg {
-	width: 60rem;
-	height: auto;
-	max-width: 100%;
-	display: block;
 }
 
 #game-board-bg.shake-board {
