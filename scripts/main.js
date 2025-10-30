@@ -62,8 +62,10 @@ let currentTurnStart = null;
 // Controls
 // const controlsMoveSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/controls-move-sound.mp3');
 
-// TODO:
 // Special Abilities
+// const abilitySoundBlock = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-block-sound.mp3');
+// const abilitySoundScratch = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-scratch-sound.mp3');
+// const abilitySoundShake = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/abilities/ability-shake-sound.mp3');
 
 // Game over
 // const gameOverSound = new Audio('/DMA105-the404Collective-RainingCats/audio/sfx/game-over.mp3');
@@ -74,6 +76,9 @@ const buttonHoverSound = new Audio('../audio/sfx/hover-sound_bubble-pop.mp3');
 const buttonClickSound = new Audio('../audio/sfx/button-click_select-sound.mp3');
 const gameOverSound = new Audio('../audio/sfx/game-over.mp3');
 const controlsMoveSound = new Audio('../audio/sfx/controls-move-sound.mp3');
+const abilitySoundBlock = new Audio('../audio/sfx/abilities/ability-block-sound.mp3');
+const abilitySoundScratch = new Audio('../audio/sfx/abilities/ability-scratch-sound.mp3');
+const abilitySoundShake = new Audio('../audio/sfx/abilities/ability-shake-sound.mp3');
 
 // Functions for game logic
 // Checks for column to be open
@@ -154,15 +159,42 @@ const useScratchAbility = ev => {
 	const chipClickedClasses = [...ev.srcElement.classList];
 	const chipClickedParentClasses = [...ev.srcElement.parentElement.classList];
 
+	// Get chip clicked location
+	let chipClickedLocation = [];
+	chipClickedClasses.forEach((className) => {
+		if (className.includes('row')) {
+			chipClickedLocation[1] = className.match(/([0-9])/)[0];
+		} else if (className.includes('col')) {
+			chipClickedLocation[0] = className.match(/([0-9])/)[0];
+		}
+	});
+
 	// Ensure game state says scratch ability is active
 	const { scratchActive } = gameState;
 	if (!scratchActive) return;
 
-	console.log(ev.srcElement);
 	// Prevent the scratch from being used on block chip
 	if (chipClickedClasses.includes('block') || chipClickedParentClasses.includes('block')) {
 		alert('Scratch ability cannot be used on block chips!');
 		return;
+	}
+
+	// Check if the chip has another chip above it
+	const belowChipClickedLocationRow = Number(chipClickedLocation[1]) + 1;
+	const aboveChipClickedLocationRow = Number(chipClickedLocation[1]) - 1;
+
+	// Bottom row
+	if (belowChipClickedLocationRow > 5) {
+		if (gameState.boardState[aboveChipClickedLocationRow][chipClickedLocation[0]] !== 0) {
+			alert('You can only use scratch on chips with no other chips above them!');
+			return;
+		}
+	} else {
+		// not bottom row
+		if (gameState.boardState[aboveChipClickedLocationRow][chipClickedLocation[0]] !== 0) {
+			alert('You can only use scratch on chips with no other chips above them!');
+			return;
+		}
 	}
 
 	// Animate chip & remove element from board
@@ -172,17 +204,14 @@ const useScratchAbility = ev => {
 	}, 900);
 
 	// Remove item from board state
-	let chipClickedLocation = [];
-	chipClickedClasses.forEach((className) => {
-		if (className.includes('row')) {
-			chipClickedLocation[0] = className.match(/([0-9])/)[0];
-		} else if (className.includes('col')) {
-			chipClickedLocation[1] = className.match(/([0-9])/)[0];
-		}
-	});
-
 	// Set the clicked cell to 0
-	gameState.boardState[chipClickedLocation[0]][chipClickedLocation[1]] = 0;
+	gameState.boardState[chipClickedLocation[1]][chipClickedLocation[0]] = 0;
+
+	// Play sound
+	if (gameState.isAudioEnabled && !closeButton.classList.contains('btn-sound-disabled')) {
+		abilitySoundScratch.currentTime = 0;
+		abilitySoundScratch.play();
+	}
 
 	// Set game state
 	gameState.scratchActive = false;
@@ -252,20 +281,45 @@ const useScratchAbility = ev => {
 			}
 		});
 	}
-	// need to figure out how to get which player used ability & add/remove classes from their special abilty NOT the board chip
-
 };
 
 const hoverScratchAbility = ev => {
 	// Get classes on chip
-	const chipClickedClasses = [...ev.srcElement.classList];
+	const chipHoverClasses = [...ev.srcElement.classList];
+	// Get chip hover location
+	let chipHoverLocation = [];
+	chipHoverClasses.forEach((className) => {
+		if (className.includes('row')) {
+			chipHoverLocation[1] = className.match(/([0-9])/)[0];
+		} else if (className.includes('col')) {
+			chipHoverLocation[0] = className.match(/([0-9])/)[0];
+		}
+	});
 
 	// Ensure game state says scratch ability is active
 	const { scratchActive } = gameState;
 	if (!scratchActive) return;
 
+	// Check if the chip has another chip above it
+	const belowChipHoverLocationRow = Number(chipHoverLocation[1]) + 1;
+	const aboveChipHoverLocationRow = Number(chipHoverLocation[1]) - 1;
+
+	// Bottom row
+	if (belowChipHoverLocationRow > 5) {
+		if (gameState.boardState[aboveChipHoverLocationRow][chipHoverLocation[0]] !== 0) {
+			ev.srcElement.classList.add('not-allowed');
+			return;
+		}
+	} else {
+		// not bottom row
+		if (gameState.boardState[aboveChipHoverLocationRow][chipHoverLocation[0]] !== 0) {
+			ev.srcElement.classList.add('not-allowed');
+			return;
+		}
+	}
+
 	// Prevent the scratch from being used on block chip
-	if (chipClickedClasses.includes('block')) {
+	if (chipHoverClasses.includes('block')) {
 		ev.srcElement.classList.add('not-allowed');
 		return;
 	}
@@ -288,6 +342,7 @@ const noHoverscratchAbility = ev => {
 	}
 
 	ev.srcElement.classList.remove('scratch-hover');
+	ev.srcElement.classList.remove('not-allowed');
 };
 
 // Game State
@@ -348,6 +403,7 @@ let gameState = {
 	allowActions: false,
 	blockActive: false,
 	scratchActive: false,
+	shakeActive: false,
 	winner: '',
 };
 
@@ -362,6 +418,9 @@ buttonHoverSound.volume = GLOBAL_VOLUME;
 buttonClickSound.volume = GLOBAL_VOLUME;
 gameOverSound.volume = GLOBAL_VOLUME;
 controlsMoveSound.volume = GLOBAL_VOLUME;
+abilitySoundBlock.volume = GLOBAL_VOLUME;
+abilitySoundScratch.volume = GLOBAL_VOLUME;
+abilitySoundShake.volume = GLOBAL_VOLUME;
 
 allButtons.forEach((button) => {
 	// HOVER
@@ -454,10 +513,23 @@ howToPlayBtns.forEach((btn) => {
 						<ul>
 							<li>To use, click the block ability icon before placing your chip. To de-activate, click the ability icon again.</li>
 						</ul>
-						
 						</li>
-						<li><strong>Scratch:</strong> Removes 1 of your opponent's chips from the board.</li>
-						<li><strong>Shake:</strong> Shakes the board, removing up to 3 chips randomly chosen on the board. Shake only removes chips that do not have other chips on top of them.</li>
+						
+						<li><strong>Scratch:</strong> Removes 1 of your opponent's chips from the board.
+						<ul>
+							<li>To use, click the scratch ability icon and click on the chip you would like to scratch.</li>
+							<li>You can only use scratch on chips with no other chips above them.</li>
+							<li>Scratch cannot be used on block chips!</li>
+						</ul>
+						</li>
+						
+						
+						<li><strong>Shake:</strong> Shakes the board, removing up to 3 chips randomly chosen on the board. Shake only removes chips that do not have other chips on top of them.
+						<ul>
+							<li>To use, click the shake ability icon and press space bar - watch the magic happen!</li>
+							<li>Shake can remove block chips!</li>
+						</ul>
+						</li>
 					</ul>
 					<h3>Winning the Game:</h3>
 					<p>The first player to connect four of their cats in a row wins! If the board fills up without any player connecting four, the player with the least amount of total time over all of their turns is the winner.</p>
@@ -764,8 +836,138 @@ document.addEventListener('keyup', (e) => {
 				return;
 			}
 
+			// Special ability - shake
+			if (gameState.shakeActive === true) {
+				// Add class to board to animate (shake)
+				const gameBoard = document.getElementById('game-board-bg');
+				gameBoard.classList.add('shake-board');
+
+				// Get all board chips
+				boardChips = document.querySelectorAll('.board-chip');
+
+				// Generate random number to determine how many chips to get rid of
+				let numChipsToRemove = Math.floor(Math.random() * 3) + 1; // 1 to 3 chips
+				let randomChips = [];
+
+				// Generate random numbers, select random chips, and remove from board
+				while (randomChips.length < numChipsToRemove) {
+					const randomChip = Math.floor(Math.random() * boardChips.length);
+					let randomChipLocation = [];
+					console.log(`Num random chips to remove: ${numChipsToRemove}`);
+
+					// Get the row value
+					if (boardChips[randomChip].className.includes('row')) {
+						randomChipLocation[1] = boardChips[randomChip].className.match(/row-([0-9])/)[1];
+					}
+
+					// Get the column value
+					if (boardChips[randomChip].className.includes('col')) {
+						randomChipLocation[0] = boardChips[randomChip].className.match(/col-([0-9])/)[1];
+					}
+
+					if (Number(randomChipLocation[1]) !== 0) {
+						// Get the row above the randomly chosen chip
+						const rowAboveRandomChip = Number(randomChipLocation[1]) - 1;
+
+						// Check for chips in the row above - skip if there's a chip
+						if (gameState.boardState[rowAboveRandomChip][randomChipLocation[0]] !== 0) {
+							continue;
+						}
+					}
+
+
+					// Only add if not already in array
+					if (!randomChips.includes(boardChips[randomChip])) {
+						randomChips.push(boardChips[randomChip]);
+
+						// Update game state
+						gameState.boardState[randomChipLocation[1]][randomChipLocation[0]] = 0;
+
+						// Animate & remove chip from board
+						boardChips[randomChip].classList.add('animate-chip-shake');
+
+						// Play sound
+						if (gameState.isAudioEnabled && !closeButton.classList.contains('btn-sound-disabled')) {
+							abilitySoundShake.currentTime = 0;
+							abilitySoundShake.play();
+						}
+
+						setTimeout(() => {
+							boardChips[randomChip].remove();
+							gameBoard.classList.remove('shake-board');
+						}, 900);
+					}
+				}
+
+				// Determine which player used the ability
+				// Remove ability active & add ability used class to board chip
+				if (gameState.currentPlayer === 1) {
+					// Player 1
+					playerSpecialAbilities.forEach((ability) => {
+						if (ability.classList.contains('ability-activated')) {
+							ability.classList.remove('ability-activated');
+							ability.classList.add('ability-used');
+							gameState.shakeActive = false;
+							changePlayer(gameState);
+							gameState.player1Turn = false;
+							gameState.player2Turn = true;
+							controlsTurnIndicator.innerText = 'Player 2 Turn';
+							controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player2Chip}.png`;
+							// Add/Remove yellow highlight for active
+							profileImagePlayer1.classList.remove('active');
+							profileImagePlayer2.classList.add('active');
+							// Add/Remove chip animation
+							profileImagePlayer1.classList.remove('animate-player-chip');
+							profileImagePlayer2.classList.add('animate-player-chip');
+
+						} else {
+							// Make player 2 abilities available & player 1 abilities unavailable
+							if (ability.parentElement.id.includes('player-2')) {
+								ability.classList.remove('btn-sound-disabled');
+								ability.classList.remove('unavailable');
+								ability.classList.add('btn-sound');
+							} else {
+								ability.classList.add('btn-sound-disabled');
+								ability.classList.add('unavailable');
+							}
+						}
+					});
+				} else {
+					// Player 2
+					playerSpecialAbilities.forEach((ability) => {
+						if (ability.classList.contains('ability-activated')) {
+							ability.classList.remove('ability-activated');
+							ability.classList.add('ability-used');
+							gameState.shakeActive = false;
+							changePlayer(gameState);
+							gameState.player1Turn = true;
+							gameState.player2Turn = false;
+							controlsTurnIndicator.innerText = 'Player 1 Turn';
+							controlsPlayerChip.src = `images/cat-chips/catchip-${gameState.player1Chip}.png`;
+							// Add/Remove yellow highlight for active
+							profileImagePlayer1.classList.add('active');
+							profileImagePlayer2.classList.remove('active');
+							// Add/Remove chip animation
+							profileImagePlayer1.classList.add('animate-player-chip');
+							profileImagePlayer2.classList.remove('animate-player-chip');
+						} else {
+							// Make player 2 abilities available & player 1 abilities unavailable
+							if (ability.parentElement.id.includes('player-2')) {
+								ability.classList.add('btn-sound-disabled');
+								ability.classList.add('unavailable');
+								ability.classList.remove('btn-sound');
+							} else {
+								ability.classList.remove('btn-sound-disabled');
+								ability.classList.remove('unavailable');
+							}
+						}
+					});
+				}
+
+				return;
+			}
+
 			// Get drop row
-			// FIXME: this is where i get the row
 			const row = dropChip(gameState, controlsCol);
 			// Column is full
 			if (row === null) {
@@ -781,6 +983,11 @@ document.addEventListener('keyup', (e) => {
 			// Build out element
 			// Determine chip image based on player or ability used
 			if (gameState.blockActive === true) {
+				if (gameState.isAudioEnabled && !closeButton.classList.contains('btn-sound-disabled')) {
+					abilitySoundBlock.currentTime = 0;
+					abilitySoundBlock.play();
+				}
+
 				newChip.classList.add('block');
 				chipImage.src = `images/abilities/ability-block.png`;
 				chipImage.style.backgroundColor = '#c2b7f3';
@@ -1136,11 +1343,9 @@ document.addEventListener('keyup', (e) => {
 					}
 				});
 			}
-
 	}
 });
 
-// TODO:
 // Special Ability Event Listeners
 playerSpecialAbilities.forEach((ability) => {
 	ability.addEventListener('click', () => {
@@ -1179,7 +1384,6 @@ playerSpecialAbilities.forEach((ability) => {
 
 					} else if (ability.classList.contains('scratch')) {
 						// Scratch ability
-						// When user clicks scratch ability - allow a chip to be selected to scratch off the board
 
 						// Activate ability
 						if (ability.classList.contains('ability-activated')) {
@@ -1210,7 +1414,6 @@ playerSpecialAbilities.forEach((ability) => {
 							ability.classList.add('ability-activated');
 							gameState.scratchActive = true;
 
-							// FIXME:
 							boardChips.forEach((chip) => {
 								chip.addEventListener('mouseenter', hoverScratchAbility);
 								chip.addEventListener('click', useScratchAbility);
@@ -1218,8 +1421,28 @@ playerSpecialAbilities.forEach((ability) => {
 							});
 						}
 					} else if (ability.classList.contains('shake')) {
+						// Get chips on board
+						const boardChips = document.querySelectorAll('.board-chip');
+
+						// No chips on board, return
+						if (boardChips.length <= 0) {
+							alert('There are no chips on the board to shake!');
+							return;
+						}
+
 						// Shake ability
 						// When user clicks shake ability - shake the board, removing up to 2 or 3 randomly selected chips from the top slots
+						// Add ability-activated
+						if (ability.classList.contains('ability-activated')) {
+							// Deactivate ability
+							ability.classList.remove('ability-activated');
+							gameState.shakeActive = false;
+
+							return;
+						} else {
+							ability.classList.add('ability-activated');
+							gameState.shakeActive = true;
+						}
 					}
 				}
 			} else {
@@ -1287,7 +1510,6 @@ playerSpecialAbilities.forEach((ability) => {
 							ability.classList.add('ability-activated');
 							gameState.scratchActive = true;
 
-							// FIXME:
 							boardChips.forEach((chip) => {
 								chip.addEventListener('mouseenter', hoverScratchAbility);
 								chip.addEventListener('click', useScratchAbility);
@@ -1295,8 +1517,28 @@ playerSpecialAbilities.forEach((ability) => {
 							});
 						}
 					} else if (ability.classList.contains('shake')) {
+						// Get chips on board
+						const boardChips = document.querySelectorAll('.board-chip');
+
+						// No chips on board, return
+						if (boardChips.length <= 0) {
+							alert('There are no chips on the board to shake!');
+							return;
+						}
+
 						// Shake ability
 						// When user clicks shake ability - shake the board, removing up to 2 or 3 randomly selected chips from the top slots
+						// Add ability-activated
+						if (ability.classList.contains('ability-activated')) {
+							// Deactivate ability
+							ability.classList.remove('ability-activated');
+							gameState.shakeActive = false;
+
+							return;
+						} else {
+							ability.classList.add('ability-activated');
+							gameState.shakeActive = true;
+						}
 					}
 				}
 			} else {

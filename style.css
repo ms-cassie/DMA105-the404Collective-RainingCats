@@ -501,6 +501,29 @@ body {
 	margin-top: 4rem;
 }
 
+#game-board-bg.shake-board {
+	animation: shake 0.5s;
+	animation-iteration-count: 3;
+}
+
+@keyframes shake {
+	0% {
+		transform: translate(0);
+	}
+	25% {
+		transform: translate(-5px, 5px);
+	}
+	50% {
+		transform: translate(5px, -5px);
+	}
+	75% {
+		transform: translate(-5px, -5px);
+	}
+	100% {
+		transform: translate(0);
+	}
+}
+
 #player-move-selection {
 	position: absolute;
 	display: flex;
@@ -758,6 +781,22 @@ body {
 	}
 }
 
+.animate-chip-shake {
+	animation: grow-and-fade 1s ease-in-out !important;
+}
+
+@keyframes grow-and-fade {
+	0% {
+		transform: scale(1);
+		opacity: 100%;
+	}
+
+	100% {
+		transform: scale(3);
+		opacity: 0;
+	}
+}
+
 /* BOARD CHIPS */
 .board-chip {
 	position: absolute;
@@ -770,6 +809,7 @@ body {
 .board-chip-image {
 	width: 100%;
 	height: 100%;
+	pointer-events: none;
 }
 
 /* COLUMNS */
