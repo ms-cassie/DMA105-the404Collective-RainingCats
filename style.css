@@ -16,6 +16,10 @@ body {
 	overflow: hidden;
 	line-height: 1.5;
 }
+html {
+	/* Using rem-based sizing lets us scale the whole board/layout on small screens */
+	font-size: 16px;
+}
 
 /* Utility classes */
 .hidden {
@@ -501,6 +505,14 @@ body {
 	margin-top: 4rem;
 }
 
+/* Constrain board image so it can scale with rem + media queries */
+#game-board-bg {
+	width: 60rem;
+	height: auto;
+	max-width: 100%;
+	display: block;
+}
+
 #game-board-bg.shake-board {
 	animation: shake 0.5s;
 	animation-iteration-count: 3;
@@ -964,4 +976,57 @@ body {
 
 #results-panel p {
 	font-size: 1.2rem;
+}
+
+/* --- Responsive adjustments --- */
+/* Large tablets / small laptops */
+@media (max-width: 1200px) {
+	html { font-size: 14px; }
+	#game-panel { padding: 2rem; }
+	.chip-options-grid { flex-wrap: wrap; justify-content: center; }
+	#chip-options .cat-chip { width: 90px; height: 90px; }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+	html { font-size: 12px; }
+	#scene-main-menu { margin-top: 4rem; }
+	#scene-main-menu #menu-content,
+	#scene-chip-select #chip-select-content,
+	#scene-game-over #game-over-content { width: 92vw; max-width: 92vw; padding: 2rem; }
+	#game-panel { width: 95vw; padding: 2rem; }
+	#game-panel-players-board { flex-direction: column; align-items: center; }
+	#player-1-section, #player-2-section { width: 100%; }
+	#game-board-bg { width: 48rem; }
+	.chip-options-grid { gap: 1.25rem; }
+}
+
+/* Phones */
+@media (max-width: 768px) {
+	html { font-size: 10px; }
+	body { overflow: auto; }
+	#scene-main-menu { margin-top: 2rem; }
+	#scene-main-menu #menu-content,
+	#scene-chip-select #chip-select-content,
+	#scene-game-over #game-over-content { width: 92vw; max-width: 92vw; padding: 1.5rem; }
+	#menu-buttons { width: 100%; max-width: 260px; }
+	#game-title { font-size: 2rem; }
+	#chip-select-content h2 { font-size: 2rem; }
+	#chip-options h3 { font-size: 1.25rem; text-align: center; }
+	#chip-options .cat-chip { width: 80px; height: 80px; }
+	#red-team, #blue-team { padding: 1.25rem; }
+	#player-move-selection { gap: 1rem; top: -2rem; left: -1rem; }
+	#left-arrow img, #right-arrow img { width: 40px; height: 40px; }
+	#player-chip { width: 80px; height: 80px; }
+	#game-board-bg { width: 42rem; }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+	html { font-size: 9px; }
+	#game-title { font-size: 1.75rem; }
+	#chip-options .cat-chip { width: 68px; height: 68px; }
+	#player-1-special-abilities img.ability,
+	#player-2-special-abilities img.ability { width: 80px; height: 80px; }
+	#game-board-bg { width: 36rem; }
 }
