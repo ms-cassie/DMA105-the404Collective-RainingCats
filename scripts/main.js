@@ -212,7 +212,7 @@ const useScratchAbility = ev => {
 	gameState.boardState[chipClickedLocation[1]][chipClickedLocation[0]] = 0;
 
 	// Play sound
-	if (gameState.isAudioEnabled && !closeButton.classList.contains('btn-sound-disabled')) {
+	if (gameState.isAudioEnabled) {
 		abilitySoundScratch.currentTime = 0;
 		abilitySoundScratch.play();
 	}
@@ -894,7 +894,7 @@ document.addEventListener('keyup', (e) => {
 						boardChips[randomChip].classList.add('animate-chip-shake');
 
 						// Play sound
-						if (gameState.isAudioEnabled && !closeButton.classList.contains('btn-sound-disabled')) {
+						if (gameState.isAudioEnabled) {
 							abilitySoundShake.currentTime = 0;
 							abilitySoundShake.play();
 						}
@@ -990,7 +990,7 @@ document.addEventListener('keyup', (e) => {
 			// Build out element
 			// Determine chip image based on player or ability used
 			if (gameState.blockActive === true) {
-				if (gameState.isAudioEnabled && !closeButton.classList.contains('btn-sound-disabled')) {
+				if (gameState.isAudioEnabled) {
 					abilitySoundBlock.currentTime = 0;
 					abilitySoundBlock.play();
 				}
